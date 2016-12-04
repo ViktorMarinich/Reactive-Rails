@@ -3,7 +3,6 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require "capybara/rails"
 require "minitest/rails/capybara"
-require 'capybara/webkit'
 require 'minitest/autorun'
 
 Capybara.register_driver :selenium do |app|
