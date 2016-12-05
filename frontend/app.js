@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SignIn from './components/SignIn'
+import SignUp from './components/SignUp'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as currentUserActions from "./actions/currentUserActions"
@@ -12,7 +13,12 @@ class App extends Component {
   render() {
     console.log(this.props)
     if (this.props.current_user== null){
-      return(<SignIn fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>)}
+      return(
+        <div>
+          <SignIn fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
+          <SignUp fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
+        </div>
+    )}
     return (<div>{this.props.children}</div>
     );
   }
