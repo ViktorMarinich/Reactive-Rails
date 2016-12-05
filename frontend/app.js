@@ -11,7 +11,8 @@ class App extends Component {
   componentDidMount(){
     this.props.currentUserActions.fetchCurrentUser()
   }
-  SignOut(){
+  SignOut(e){
+    e.preventDefault()
     this.props.currentUserActions.destroySession()
   }
   render() {
