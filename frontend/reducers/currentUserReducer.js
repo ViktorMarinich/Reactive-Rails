@@ -3,6 +3,9 @@ export default function reducer(state={ currentUser: null }, action) {
       case "FETCH_CURRENT_USER": {
         return {...state, currentUser: action.payload}
       }
+      case "DESTROY_SESSION": {
+        return {...state, currentUser: action.payload}
+      }
     }
     return state
 }
