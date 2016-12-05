@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   root 'users#index'
   get 'users/current' => 'users#current'
+  get 'logout' => 'sessions#destroy'
   resources :users, :defaults => { :format => 'json' }
-  resources :sessions, only: [:create,:destroy], :defaults => { :format => 'json' }
+  resources :sessions, only: [:create], :defaults => { :format => 'json' }
   resources :news, only: [:create ],:defaults => { :format => 'json' }
 
   # The priority is based upon order of creation: first created -> highest priority.
