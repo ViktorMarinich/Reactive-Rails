@@ -1,8 +1,14 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-
+import App from './app'
 document.addEventListener('DOMContentLoaded', function() {
 
-ReactDOM.render( , document.getElementById('app'));
+ReactDOM.render(
+    <Router history={hashHistory}>
+        <Route path='/' component={App}>
+            <IndexRoute  component={User} />
+        </Route>
+    </Router>,
+   document.getElementById('app'));
 });
