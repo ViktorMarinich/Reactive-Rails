@@ -16,6 +16,7 @@ class UsersTest < ActionDispatch::IntegrationTest
     page.fill_in "password_field", :with => "password"
     page.fill_in "password_confirmation_field", :with => "password"
     page.find('button[id="sign_up"]').click
+    click_on "My profile"
     assert page.has_content?("Welcome to User Profile")
   end
 end
