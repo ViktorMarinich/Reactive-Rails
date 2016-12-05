@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   after_save :create_wall
   has_one :wall
   has_many :news
+  has_many :galleries
   has_secure_password
 
   private
