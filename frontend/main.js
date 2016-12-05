@@ -12,7 +12,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={hashHistory}>
         <Route path='/' component={App}>
-            <IndexRoute  component={User} />
+          <Route path='/user/:userId' component={User} />
         </Route>
     </Router>
   </Provider>,
