@@ -18,5 +18,6 @@ class UsersTest < ActionDispatch::IntegrationTest
     page.find('button[id="sign_up"]').click
     click_on "My profile"
     assert page.has_content?("Welcome to User Profile")
+    click_on "Sign Out"
   end
 end
