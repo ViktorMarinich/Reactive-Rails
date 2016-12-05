@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161205155614) do
+ActiveRecord::Schema.define(version: 20161205232811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "galleries", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "news_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "galleries", ["news_id"], name: "index_galleries_on_news_id", using: :btree
+  add_index "galleries", ["user_id"], name: "index_galleries_on_user_id", using: :btree
 
   create_table "news", force: :cascade do |t|
     t.string   "text"
@@ -44,6 +54,8 @@ ActiveRecord::Schema.define(version: 20161205155614) do
 
   add_index "walls", ["user_id"], name: "index_walls_on_user_id", using: :btree
 
+  add_foreign_key "galleries", "news"
+  add_foreign_key "galleries", "users"
   add_foreign_key "news", "users"
   add_foreign_key "news", "walls"
   add_foreign_key "walls", "users"
