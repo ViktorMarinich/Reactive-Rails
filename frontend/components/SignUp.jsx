@@ -4,7 +4,10 @@ import axios from 'axios';
 
 export default class SignUp extends React.Component{
   CreateUser() {
-
+    axios.post('/users', {user: {email: this.refs.email.value,name: this.refs.name.value, password: this.refs.password.value, password_confirmation: this.refs.password_confirmation.value}})
+      .then((response) => {
+        this.props.fetchCurrentUser()
+      })
   }
 
   render() {
@@ -19,7 +22,7 @@ export default class SignUp extends React.Component{
             <p><input  size="30" ref='password' type="password"  id='password_field'/> </p>
             <p>Password confirmation</p>
             <p><input size="30" type="password" ref='password_confirmation' id='password_confirmation_field'/></p>
-            <button id="sign_up" onClick={this.CreateUser.bind(this)}>Sign Up</button>
+            <button id="sign_up" onClick={this.CreateUser.bind(this)} >Sign Up</button>
       </div>
     );
   }
