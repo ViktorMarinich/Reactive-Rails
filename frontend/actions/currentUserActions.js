@@ -9,3 +9,11 @@ export function fetchCurrentUser() {
       })
   }
 }
+export function destroySession() {
+  return function(dispatch) {
+    axios.get("/logout")
+      .then((response) => {
+        dispatch({type: "DESTROY_SESSION", payload: null})
+      })
+  }
+}
