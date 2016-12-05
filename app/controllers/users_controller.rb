@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     render json: @user.to_json( :include => [
       :wall =>{:include=>{
           :news =>{:include => [{
-               :user=>{:only => [:name,:avatar]}}],:only => :text}},:only => :id}
+               :user=>{:only => [:name,:avatar,:id]}}],:only => [:id,:text]}},:only => :id}
       ], :only => [:name,:email,:id,:avatar] )
   end
 
