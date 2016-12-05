@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root 'users#index'
+  get 'users/current' => 'users#current'
   resources :users, :defaults => { :format => 'json' }
   resources :sessions, only: [:create,:destroy], :defaults => { :format => 'json' }
 
