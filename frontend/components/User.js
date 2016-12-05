@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import * as userActions from "../actions/userActions"
 import * as currentUserActions from "../actions/currentUserActions"
 import News from './News'
+import Profile from './Profile'
 
 class User extends Component{
   componentWillMount(){
@@ -14,7 +15,7 @@ class User extends Component{
     return (
       <div>
       Welcome to User Profile
-      {this.props.current_user.name}
+        <Profile user={this.props.user}/>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
           text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}/>
         </div>
