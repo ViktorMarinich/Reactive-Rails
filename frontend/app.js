@@ -5,11 +5,14 @@ import { bindActionCreators } from 'redux'
 import * as currentUserActions from "./actions/currentUserActions"
 
 class App extends Component {
+  componentDidMount(){
+    this.props.currentUserActions.fetchCurrentUser()
+  }
 
   render() {
     console.log(this.props)
     if (this.props.current_user== null){
-      return(<SignIn/>)}
+      return(<SignIn fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>)}
     return (<div>{this.props.children}</div>
     );
   }
