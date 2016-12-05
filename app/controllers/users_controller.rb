@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
-  
+
   def index
   end
 
@@ -19,6 +19,15 @@ class UsersController < ApplicationController
         render :json => { :errors => @user.errors }
       end
     end
+  end
+
+  def show
+    @user = User.find(params[:id])
+    render json: @user.to_json( :include => [
+      :wall =>{:include=>{
+          :news =>{:include => [{
+               :user=>{:only => [:name,:avatar]}}],:only => :text}},:only => :id}
+      ], :only => [:name,:email,:id,:avatar] )
   end
 
   private
