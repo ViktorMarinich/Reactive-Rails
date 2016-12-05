@@ -22,5 +22,7 @@ class UsersTest < ActionDispatch::IntegrationTest
     page.fill_in "news", :with => "New news"
     page.find('button[id="create_news"]').click
     assert page.has_content?("New news")
+    click_on "My profile"
+    
   end
 end
