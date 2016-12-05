@@ -26808,6 +26808,10 @@
 
 	var _reactRouter = __webpack_require__(183);
 
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -26833,9 +26837,14 @@
 	      this.props.currentUserActions.fetchCurrentUser();
 	    }
 	  }, {
+	    key: 'SignOut',
+	    value: function SignOut(e) {
+	      e.preventDefault();
+	      this.props.currentUserActions.destroySession();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props);
 	      if (this.props.current_user == null) {
 	        return _react2.default.createElement(
 	          'div',
@@ -26851,6 +26860,11 @@
 	          _reactRouter.Link,
 	          { to: '/user/' + this.props.current_user.id },
 	          'My profile'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/', onClick: this.SignOut.bind(this) },
+	          'Sign Out'
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -30619,6 +30633,7 @@
 	  value: true
 	});
 	exports.fetchCurrentUser = fetchCurrentUser;
+	exports.destroySession = destroySession;
 
 	var _axios = __webpack_require__(241);
 
@@ -30631,6 +30646,13 @@
 	    _axios2.default.get("/users/current").then(function (response) {
 	      console.log('resp', response.data);
 	      dispatch({ type: "FETCH_CURRENT_USER", payload: response.data });
+	    });
+	  };
+	}
+	function destroySession() {
+	  return function (dispatch) {
+	    _axios2.default.get("/logout").then(function (response) {
+	      dispatch({ type: "DESTROY_SESSION", payload: null });
 	    });
 	  };
 	}
@@ -30667,6 +30689,10 @@
 
 	var _News2 = _interopRequireDefault(_News);
 
+	var _Profile = __webpack_require__(316);
+
+	var _Profile2 = _interopRequireDefault(_Profile);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30699,7 +30725,7 @@
 	        'div',
 	        null,
 	        'Welcome to User Profile',
-	        this.props.current_user.name,
+	        _react2.default.createElement(_Profile2.default, { user: this.props.user }),
 	        _react2.default.createElement(_News2.default, { user: this.props.user, updateNews: this.props.userActions.updateNews,
 	          text: this.props.text, updateNewsText: this.props.userActions.updateNewsText })
 	      );
@@ -30979,6 +31005,10 @@
 	      {
 	        return _extends({}, state, { currentUser: action.payload });
 	      }
+	    case "DESTROY_SESSION":
+	      {
+	        return _extends({}, state, { currentUser: action.payload });
+	      }
 	  }
 	  return state;
 	}
@@ -31027,6 +31057,87 @@
 	  }
 	  return state;
 	}
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(182);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Profile = function (_React$Component) {
+	  _inherits(Profile, _React$Component);
+
+	  function Profile() {
+	    _classCallCheck(this, Profile);
+
+	    return _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).apply(this, arguments));
+	  }
+
+	  _createClass(Profile, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props$user = this.props.user,
+	          name = _props$user.name,
+	          email = _props$user.email,
+	          id = _props$user.id;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Profile info'
+	        ),
+	        _react2.default.createElement('img', { src: '', width: '200', height: '200' }),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Name: ',
+	          name
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Email: ',
+	          email
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Email: ',
+	          id
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Profile;
+	}(_react2.default.Component);
+
+	exports.default = Profile;
 
 /***/ }
 /******/ ]);
