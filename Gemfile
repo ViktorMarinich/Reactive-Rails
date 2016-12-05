@@ -41,8 +41,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem "minitest-rails-capybara"
-  gem "capybara-webkit"
-  gem 'selenium-webdriver', '~> 2.53'
+  gem 'selenium-webdriver', '~> 2.53.4'
   gem 'rails-controller-testing'
 end
 
