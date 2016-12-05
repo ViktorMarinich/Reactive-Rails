@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersTest < ActionDispatch::IntegrationTest
   def setup
     super
-    @user= users(:user11)
+    @user= users(:user1)
     visit root_path
   end
 
@@ -22,7 +22,6 @@ class UsersTest < ActionDispatch::IntegrationTest
     page.fill_in "news", :with => "New news"
     page.find('button[id="create_news"]').click
     assert page.has_content?("New news")
-    click_on "My profile"
-    
+    click_on "Sign Out"
   end
 end
