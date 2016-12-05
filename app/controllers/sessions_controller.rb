@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  protect_from_forgery unless: -> { request.format.json? }
 
   def create
     user = User.find_by(email: params[:session][:email].downcase)
