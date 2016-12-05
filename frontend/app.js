@@ -5,14 +5,16 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as currentUserActions from "./actions/currentUserActions"
 import { Link } from 'react-router';
+import axios from 'axios';
 
 class App extends Component {
   componentDidMount(){
     this.props.currentUserActions.fetchCurrentUser()
   }
-
+  SignOut(){
+    this.props.currentUserActions.destroySession()
+  }
   render() {
-    console.log(this.props)
     if (this.props.current_user== null){
       return(
         <div>
@@ -23,6 +25,7 @@ class App extends Component {
     return (
       <div>
         <Link to={`/user/${this.props.current_user.id}`}>My profile</Link>
+        <Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link>
         <div>{this.props.children}</div>
       </div>
   );
