@@ -19,6 +19,6 @@ class UsersTest < ActionDispatch::IntegrationTest
     assert page.has_content?("Welcome to User Profile")
     click_on "Sign Out"
     assert page.has_content?("Sign in")
-    assert page.has_content?("Sign up")
+    assert page.has_content?("Sign Up")
   end
 end
