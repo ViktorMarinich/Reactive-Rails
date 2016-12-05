@@ -9,7 +9,7 @@ class NewsController < ApplicationController
     respond_to do |format|
       format.json do
         if @news.save
-          render :json => @news.to_json
+          render :json => @news.to_json(:include => [:user=>{:only => [:name,:email,:id, :avatar]}])
         else
           render :json => { :errors => @news.to_json }
         end
