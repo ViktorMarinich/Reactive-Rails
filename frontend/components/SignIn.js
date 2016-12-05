@@ -1,6 +1,15 @@
 import React from 'react';
+import axios from "axios";
 
 export default class SignIn extends React.Component{
+  Login() {
+    const email = this.refs.email.value;
+    const password = this.refs.password.value;
+    axios.post('/sessions', {session: {email: email, password: password}})
+      .then((response) => {
+        this.props.fetchCurrentUser()
+      })
+  }
   render() {
     return (
       <div>
