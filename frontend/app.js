@@ -4,6 +4,7 @@ import SignUp from './components/SignUp'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as currentUserActions from "./actions/currentUserActions"
+import { Link } from 'react-router';
 
 class App extends Component {
   componentDidMount(){
@@ -19,8 +20,12 @@ class App extends Component {
           <SignUp fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
         </div>
     )}
-    return (<div>{this.props.children}</div>
-    );
+    return (
+      <div>
+        <Link to={`/user/${this.props.current_user.id}`}>My profile</Link>
+        <div>{this.props.children}</div>
+      </div>
+  );
   }
 }
 function mapStateToProps(state) {
