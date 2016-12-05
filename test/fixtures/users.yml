@@ -6,3 +6,7 @@ user<%= n %>:
   email: <%= "#{n}@ukr.net" %>
   password_digest: <%= User.bcrypt_string("aaaa") %>
 <% end %>
+user11:
+  name: "user11"
+  email: "11@ukr.net"
+  password_digest: <%= User.bcrypt_string("aaaa") %>
