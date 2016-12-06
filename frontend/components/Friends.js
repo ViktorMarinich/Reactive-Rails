@@ -43,10 +43,12 @@ export default class Friends extends React.Component{
           <div style={{   display: 'flex',flexWrap: 'wrap',  alignContent: 'stretch', justifyContent: 'flex-start'}}>
         {friend_list}
       </div>
+      {(this.props.current_user.id==this.props.user.id)? <div>
         <h3>Incoming requests</h3>
         {incoming_list}
         <h3>Outcoming requests</h3>
-        {outcoming_list}
+        {outcoming_list}</div>: ''}
+
       </div>
     );
   }
