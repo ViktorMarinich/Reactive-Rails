@@ -5,3 +5,19 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+Gallery.delete_all
+News.delete_all
+Wall.delete_all
+Relationship.delete_all
+Friendship.delete_all
+User.delete_all
+19.times do |n|
+  User.create(name:"Mister#{n}", email: "#{n+1}@ukr.net", password: "aaaa",password_confirmation: "aaaa")
+end
+z=0
+User.all.each do |n|
+  z=z+1
+  unless z > 10
+    User.first.friendships.new(friend: n).save unless User.first == n
+  end
+end
