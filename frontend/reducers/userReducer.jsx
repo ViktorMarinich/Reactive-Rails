@@ -1,4 +1,4 @@
-export default function reducer(state={user: [], text: '' }, action) {
+export default function reducer(state={user: [], text: '',files: [] }, action) {
     switch (action.type) {
       case "FETCH_USER": {
         return {...state, user: action.payload}
@@ -14,6 +14,10 @@ export default function reducer(state={user: [], text: '' }, action) {
       }
       case "UPDATE_NEWS_TEXT": {
         return {...state, text: action.payload }
+        break;
+      }
+      case "UPDATE_FILES": {
+        return {...state, files: action.payload }
         break;
       }
   }
