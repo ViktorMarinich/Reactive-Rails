@@ -14,6 +14,7 @@ export default class SignUp extends React.Component{
     axios.post('/users',  data)
       .then((response) => {
         this.props.fetchCurrentUser()
+        this.props.router.push(`user/${response.data.id}`)
       })
   }
   onDrop(files) {

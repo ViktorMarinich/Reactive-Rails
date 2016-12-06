@@ -8,6 +8,7 @@ export default class SignIn extends React.Component{
     axios.post('/sessions', {session: {email: email, password: password}})
       .then((response) => {
         this.props.fetchCurrentUser()
+        this.props.router.push(`user/${response.data.id}`)
       })
   }
   render() {
