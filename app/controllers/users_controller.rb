@@ -23,8 +23,9 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    render json: @user.to_json( :include => [{
-         :wall =>{:include=>{
+    render json: @user.to_json( :include => [
+         {:friends => {:only => [:name,:id,:avatar]}},
+         {:wall =>{:include=>{
              :news =>{:include => [{
                 :user=>{:only => [:name,:id,:avatar]}},
                 :gallery=>{:include=> [:images=> {:only => [:image, :id]}]}],:only => [:id,:text]}},:only => :id}},
