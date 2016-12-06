@@ -5,6 +5,12 @@ class NewsController < ApplicationController
     @user=User.find(params[:id])
     @wall=@user.wall
     @news=@wall.news.new(text: params[:news][:text])
+    if params[:image]
+      Gallery.create(news: @news)
+      params[:image].each do |k,v|
+        @image = @news.gallery.images.create(image: v)
+      end
+    end
     current_user.news << @news
     respond_to do |format|
       format.json do
