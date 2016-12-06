@@ -3,6 +3,10 @@ class User < ActiveRecord::Base
   has_one :wall
   has_many :news
   has_one :gallery
+  has_many :relationships,foreign_key: "user_id",class_name:  "Relationship", dependent: :destroy
+  has_many :outcoming, through: :relationships,  source: :friend
+  has_many :reverse_relationships, foreign_key: "friend_id", class_name:  "Relationship", dependent: :destroy
+  has_many :incoming, through: :reverse_relationships, source: :user
   has_secure_password
 
   private
