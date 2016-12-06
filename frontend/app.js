@@ -17,6 +17,8 @@ class App extends Component {
     this.props.currentUserActions.destroySession()
   }
   render() {
+    if (typeof this.props.current_user=='undefined') {return <div>Loading...</div>}
+    console.log("CU",this.props.current_user)
     if (this.props.current_user== null){
       return(
         <div>
