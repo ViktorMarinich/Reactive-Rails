@@ -28,6 +28,22 @@ export default function reducer(state={user: [], text: '',files: [],news_files: 
         return {...state, news_files: action.payload }
         break;
       }
+      case "UPDATE_INCOMING_REQUESTS": {
+        return {...state, user: {...state.user, incoming: [...state.user.incoming, action.payload ] } }
+        break;
+      }
+      case "UPDATE_OUTCOMING_REQUESTS": {
+        return {...state, user: {...state.user, outcoming: [...state.user.incoming, action.payload ] } }
+        break;
+      }
+      case "DELETE_FRIEND": {
+        return {...state, user:{...state.user, friends: state.user.friends.filter(friend => friend.id !== action.payload) } }
+        break;
+      }
+      case "ADD_FRIEND": {
+        return {...state, user:{...state.user, friends: state.user.friends.concat(action.payload) } }
+        break;
+      }
   }
     return state
 }
