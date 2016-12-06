@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :users, :defaults => { :format => 'json' }
   resources :sessions, only: [:create], :defaults => { :format => 'json' }
   resources :news, only: [:create ],:defaults => { :format => 'json' }
+  resources :images, only: [:create ],:defaults => { :format => 'json' }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
