@@ -8,6 +8,10 @@ import Profile from './Profile'
 import Gallery from './Gallery'
 import Friends from './Friends'
 
+const style={
+  menuItem: {width: '300px', display: 'inline-block'}
+}
+
 class User extends Component{
   componentWillMount(){
     this.props.userActions.fetchUser(this.props.params.userId)
@@ -21,16 +25,21 @@ class User extends Component{
   render() {
     console.log(this.props)
     return (
-      <div>
-      Welcome to User Profile
-        <Profile user={this.props.user}/>
-        <Friends user={this.props.user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
-        <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
+      <div style={{display: 'flex', width: '1000px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
+        <div style={style.menuItem}>
+          <Profile user={this.props.user}/>
+          <Friends user={this.props.user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
+        </div>
+        <div style={style.menuItem}>
+          <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
            updateGallery={this.props.userActions.updateGallery}/>
+        </div>
+        <div style={style.menuItem}>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
           text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}
           news_files={this.props.news_files} updateNewsFiles={this.props.userActions.updateNewsFiles}/>
         </div>
+      </div>
     );
   }
 }
