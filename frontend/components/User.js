@@ -5,6 +5,7 @@ import * as userActions from "../actions/userActions"
 import * as currentUserActions from "../actions/currentUserActions"
 import News from './News'
 import Profile from './Profile'
+import Gallery from './Gallery'
 
 class User extends Component{
   componentWillMount(){
@@ -16,6 +17,7 @@ class User extends Component{
       <div>
       Welcome to User Profile
         <Profile user={this.props.user}/>
+        <Gallery files={this.props.files} updateFiles={this.props.userActions.updateFiles}/>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
           text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}/>
         </div>
@@ -26,6 +28,7 @@ function mapStateToProps(state) {
   return {
     user: state.user.user,
     text: state.user.text,
+    files: state.user.files,
     current_user: state.currentUser.currentUser,
   }
 }
