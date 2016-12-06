@@ -19,7 +19,8 @@ class User extends Component{
         <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
            updateGallery={this.props.userActions.updateGallery}/>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
-          text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}/>
+          text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}
+          news_files={this.props.news_files} updateNewsFiles={this.props.userActions.updateNewsFiles}/>
         </div>
     );
   }
@@ -29,6 +30,7 @@ function mapStateToProps(state) {
     user: state.user.user,
     text: state.user.text,
     files: state.user.files,
+    news_files: state.user.news_files,
     current_user: state.currentUser.currentUser,
   }
 }
