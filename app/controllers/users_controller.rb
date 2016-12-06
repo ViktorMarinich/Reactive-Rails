@@ -27,9 +27,9 @@ class UsersController < ApplicationController
          :wall =>{:include=>{
              :news =>{:include => [{
                 :user=>{:only => [:name,:id,:avatar]}},
-                :gallery=>{:include=> [:images=> {:only => :image}]}],:only => [:id,:text]}},:only => :id}},
+                :gallery=>{:include=> [:images=> {:only => [:image, :id]}]}],:only => [:id,:text]}},:only => :id}},
          :gallery=>{:include=> [
-             :images=> {:only => :image}],:only => :id}],
+             :images=> {:only => [:image, :id]}],:only => :id}],
       :only => [:name,:email,:id,:avatar] )
   end
 
