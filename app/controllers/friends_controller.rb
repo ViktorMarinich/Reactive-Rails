@@ -8,8 +8,11 @@ class FriendsController < ApplicationController
       rel = @user.relationships.find_by(friend_id: current_user)
       rel.destroy if rel
       if @friendships.save
-        render json: current_user.to_json
+        render json: @user.to_json
       end
+    else
+      rel = @user.relationships.find_by(friend_id: current_user)
+      rel.destroy if rel
     end
 
   end
