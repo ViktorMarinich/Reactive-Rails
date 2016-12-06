@@ -7,6 +7,7 @@ import News from './News'
 import Profile from './Profile'
 import Gallery from './Gallery'
 import Friends from './Friends'
+import RelationshipRequest  from './RelationshipRequest'
 
 const style={
   menuItem: {width: '300px', display: 'inline-block'}
@@ -28,7 +29,8 @@ class User extends Component{
       <div style={{display: 'flex', width: '1000px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
         <div style={style.menuItem}>
           <Profile user={this.props.user}/>
-          <Friends user={this.props.user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
+          {(this.props.current_user.id!=this.props.user.id)? <RelationshipRequest  user={this.props.user}  current_user={this.props.current_user}/> :''}
+          <Friends user={this.props.user} current_user={this.props.current_user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
         </div>
         <div style={style.menuItem}>
           <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
