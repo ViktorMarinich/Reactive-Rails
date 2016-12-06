@@ -11,6 +11,12 @@ class User extends Component{
   componentWillMount(){
     this.props.userActions.fetchUser(this.props.params.userId)
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params != this.props.params){
+      this.props.userActions.fetchUser(nextProps.params.userId)
+      this.props.userActions.updateNewsText('')
+    }
+  }
   render() {
     return (
       <div>
