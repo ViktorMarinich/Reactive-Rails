@@ -22,12 +22,18 @@ export default class News extends React.Component{
   }
   render() {
     const {news_files, user}=this.props
+    if (typeof user.wall == 'undefined'){
+      return <div>Loading</div>
+    }
     const news=(typeof user.wall=='undefined')? '': user.wall.news.sort(  function(a, b) {
     if (a.id > b.id) { return -1;}
     if (a.id < b.id) { return 1; }
-    return 0; }).map( function (news) {
-    return  (<div key={news.id}>{news.text}</div>)
-  })
+      return 0; }).map( function (news) {
+      let images=(typeof news.gallery == 'undefined')? '':news.gallery.images.map(function(image){
+        return <img key={image.id}  src={image.image.thumb.url} style={{padding: 1}}></img>
+      })
+      return  (<div key={news.id}>{news.text} {images}</div>)
+    })
   return (
     <div className='border shadow'>
       <h3 className='align-center'>News</h3>
@@ -42,7 +48,7 @@ export default class News extends React.Component{
             {(news_files.length >0 )? <div >
             <h4>You add {news_files.length} images.</h4>
             <div >
-              {news_files.map((file) => <img  src={file.preview} width="50" height="50"/>)}
+              {news_files.map((file) => <img src={file.preview} width="50" height="50"/>)}
             </div>
             </div> : null}
         </div>
