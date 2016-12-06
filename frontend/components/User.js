@@ -12,12 +12,12 @@ class User extends Component{
     this.props.userActions.fetchUser(this.props.params.userId)
   }
   render() {
-    console.log('pro',this.props)
     return (
       <div>
       Welcome to User Profile
         <Profile user={this.props.user}/>
-        <Gallery files={this.props.files} updateFiles={this.props.userActions.updateFiles}/>
+        <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
+           updateGallery={this.props.userActions.updateGallery}/>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
           text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}/>
         </div>
