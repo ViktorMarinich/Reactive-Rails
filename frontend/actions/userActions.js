@@ -44,3 +44,9 @@ export function updateFiles(value) {
     payload: value,
   }
 }
+export function updateGallery(value) {
+  return {
+    type: 'UPDATE_GALLERY',
+    payload: value,
+  }
+}
