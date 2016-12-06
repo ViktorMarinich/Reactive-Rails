@@ -37,7 +37,7 @@ export default class News extends React.Component{
       <div key={news.id} style={{borderStyle: 'solid', backgroundColor: 'white',borderWidth: '1px', marginTop: '5px', padding: '3px'}}>
         <div style={{display: 'flex', flexDirection: 'row',borderBottomStyle: 'solid',borderBottomWidth: '1px', paddingBottom: '4px', justifyContent: 'flex-start',alignItems: 'flex-start'}}>
           <img src='' style={{width: '50px', height: '50px'}}></img>
-          <h5 style={{paddingLeft: '5px', marginTop: '5px'}}>User: {news.user.name}</h5>
+          <h5 style={{paddingLeft: '5px', marginTop: '5px'}}>User: {(typeof news.user=='undefined')?'':news.user.name}</h5>
         </div>
         <div style={{display: 'flex',  flexDirection: 'column', alignItems:'flex-start', justifyContent: 'flex-start'}}>
           <h3>{news.text}</h3>
