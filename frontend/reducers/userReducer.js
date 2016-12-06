@@ -20,6 +20,10 @@ export default function reducer(state={user: [], text: '',files: [] }, action) {
         return {...state, files: action.payload }
         break;
       }
+      case "UPDATE_GALLERY": {
+        return {...state, user: {...state.user, gallery: {...state.user.gallery, images: state.user.gallery.images.concat(action.payload)}} }
+        break;
+      }
   }
     return state
 }
