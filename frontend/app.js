@@ -4,6 +4,7 @@ import SignUp from './components/SignUp'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as currentUserActions from "./actions/currentUserActions"
+import * as userActions from "./actions/userActions"
 import { Link } from 'react-router';
 import axios from 'axios';
 
@@ -20,7 +21,7 @@ class App extends Component {
       return(
         <div>
           <SignIn fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
-          <SignUp fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
+          <SignUp files={this.props.files} updateFiles={this.props.userActions.updateFiles} fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
         </div>
     )}
     return (
@@ -35,12 +36,14 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     current_user: state.currentUser.currentUser,
+    files: state.user.files,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    currentUserActions: bindActionCreators(currentUserActions, dispatch)
+    currentUserActions: bindActionCreators(currentUserActions, dispatch),
+    userActions: bindActionCreators(userActions, dispatch),
   }
 }
 
