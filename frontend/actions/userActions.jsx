@@ -37,3 +37,10 @@ export function updateNewsText(value) {
     payload: value,
   }
 }
+
+export function updateFiles(value) {
+  return {
+    type: 'UPDATE_FILES',
+    payload: value,
+  }
+}
