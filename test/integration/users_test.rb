@@ -16,7 +16,7 @@ class UsersTest < ActionDispatch::IntegrationTest
     click_on "My profile"
     assert page.has_content?("News")
     assert page.has_selector?('textarea',:count => 1)
-    assert page.has_selector?('button',:count => 1)
+    assert page.has_selector?('button')
     page.fill_in "news", :with => "New news"
     page.find('button[id="create_news"]').click
     assert page.has_content?("New news")
