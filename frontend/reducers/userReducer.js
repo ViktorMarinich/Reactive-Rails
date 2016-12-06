@@ -1,4 +1,4 @@
-export default function reducer(state={user: [], text: '',files: [] }, action) {
+export default function reducer(state={user: [], text: '',files: [],news_files: [] }, action) {
     switch (action.type) {
       case "FETCH_USER": {
         return {...state, user: action.payload}
@@ -22,6 +22,10 @@ export default function reducer(state={user: [], text: '',files: [] }, action) {
       }
       case "UPDATE_GALLERY": {
         return {...state, user: {...state.user, gallery: {...state.user.gallery, images: state.user.gallery.images.concat(action.payload)}} }
+        break;
+      }
+      case "UPDATE_NEWS_FILES": {
+        return {...state, news_files: action.payload }
         break;
       }
   }
