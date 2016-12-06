@@ -50,3 +50,9 @@ export function updateGallery(value) {
     payload: value,
   }
 }
+export function updateNewsFiles(value) {
+  return {
+    type: 'UPDATE_NEWS_FILES',
+    payload: value,
+  }
+}
