@@ -56,3 +56,36 @@ export function updateNewsFiles(value) {
     payload: value,
   }
 }
+export function updateIncoming(id) {
+  return function(dispatch) {
+    axios.get(`/users/${id}`)
+      .then((response) => {
+        dispatch({type: "UPDATE_INCOMING_REQUESTS", payload: response.data})
+      })
+  }
+}
+export function updateOutcoming(id) {
+  return function(dispatch) {
+    axios.get(`/users/${id}`)
+      .then((response) => {
+        dispatch({type: "UPDATE_OUTCOMING_REQUESTS", payload: response.data})
+      })
+  }
+}
+export function deleteFriend(params) {
+  return function(dispatch) {
+    axios.post('/friends/destroy', params)
+    .then((response) => {
+      dispatch({type: "DELETE_FRIEND", payload: response.data.user_id})
+    })
+  }
+}
+export function addFriend(params) {
+  return function(dispatch) {
+    axios.post('/friends', params)
+    .then((response) => {
+      console.log(response.data)
+      dispatch({type: "ADD_FRIEND", payload: response.data})
+    })
+  }
+}
