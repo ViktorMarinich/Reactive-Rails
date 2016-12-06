@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resources :sessions, only: [:create], :defaults => { :format => 'json' }
   resources :news, only: [:create ],:defaults => { :format => 'json' }
   resources :images, only: [:create ],:defaults => { :format => 'json' }
+  resources :relationships, only: [:create ],:defaults => { :format => 'json' }
+  resources :friends, only: [:create, :destroy ],:defaults => { :format => 'json' }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
