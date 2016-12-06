@@ -44,6 +44,10 @@ export default function reducer(state={user: [], text: '',files: [],news_files: 
         return {...state, user:{...state.user, friends: state.user.friends.concat(action.payload) } }
         break;
       }
+      case "DELETE_INCOMING": {
+        return {...state, user:{...state.user, incoming: state.user.incoming.filter(friend => friend.id !== action.payload) } }
+        break;
+      }
   }
     return state
 }
