@@ -23,11 +23,14 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    render json: @user.to_json( :include => [
-      :wall =>{:include=>{
-          :news =>{:include => [{
-               :user=>{:only => [:name,:avatar,:id]}}],:only => [:id,:text]}},:only => :id}
-      ], :only => [:name,:email,:id,:avatar] )
+    render json: @user.to_json( :include => [{
+         :wall =>{:include=>{
+             :news =>{:include => [{
+                :user=>{:only => [:name,:id,:avatar]}},
+                :gallery=>{:include=> [:images=> {:only => :image}]}],:only => [:id,:text]}},:only => :id}},
+         :gallery=>{:include=> [
+             :images=> {:only => :image}],:only => :id}],
+      :only => [:name,:email,:id,:avatar] )
   end
 
   private
