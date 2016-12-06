@@ -6,6 +6,7 @@ import * as currentUserActions from "../actions/currentUserActions"
 import News from './News'
 import Profile from './Profile'
 import Gallery from './Gallery'
+import Friends from './Friends'
 
 class User extends Component{
   componentWillMount(){
@@ -18,10 +19,12 @@ class User extends Component{
     }
   }
   render() {
+    console.log(this.props)
     return (
       <div>
       Welcome to User Profile
         <Profile user={this.props.user}/>
+        <Friends user={this.props.user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
         <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
            updateGallery={this.props.userActions.updateGallery}/>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
