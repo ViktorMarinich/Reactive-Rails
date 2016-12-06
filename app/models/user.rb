@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  after_save :create_wall
+  after_save :create_wall, :create_gallery
   has_one :wall
   has_many :news
   has_one :gallery
@@ -9,11 +9,16 @@ class User < ActiveRecord::Base
   has_many :incoming, through: :reverse_relationships, source: :user
   has_many :friendships, dependent: :destroy
   has_many :friends, through: :friendships
+  mount_uploader :avatar, ImageUploader
   has_secure_password
 
   private
   def create_wall
     Wall.create(user_id: self.id)
+  end
+
+  def create_gallery
+    Gallery.create(user_id: self.id)
   end
 
   def self.bcrypt_string(string,cost=1)
