@@ -12,7 +12,15 @@ export default class Friends extends React.Component{
     console.log('fruend props',this.props)
     const {incoming,outcoming, friends }=this.props.user
     const friend_list = (typeof friends=='undefined')?'':friends.map((friend)=>{
-      return   <Link to={`/user/${friend.id}`}>{friend.name}</Link>
+
+      return (
+        <div style={{display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start',alignItems: 'flex-start'}} >
+        <Link to={`/user/${friend.id}`}>
+        <img key={friend.id}  src={friend.avatar.smaller.url} style={{width: 72, height: 72}} ></img>
+        <h5 style={{ margin: '3px', textAlign: 'center'}}>{friend.name}</h5>
+        </Link>
+        </div>)
+
     })
     const incoming_list = (typeof incoming=='undefined')?'':incoming.map((friend)=>{
       return (
@@ -32,7 +40,9 @@ export default class Friends extends React.Component{
     return (
       <div>
         <h3>Friends</h3>
+          <div style={{   display: 'flex',flexWrap: 'wrap',  alignContent: 'stretch', justifyContent: 'flex-start'}}>
         {friend_list}
+      </div>
         <h3>Incoming requests</h3>
         {incoming_list}
         <h3>Outcoming requests</h3>
