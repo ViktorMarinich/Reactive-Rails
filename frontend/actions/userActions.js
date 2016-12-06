@@ -89,3 +89,9 @@ export function addFriend(params) {
     })
   }
 }
+export function deleteIncoming(value) {
+  return {
+    type: 'DELETE_INCOMING',
+    payload: value,
+  }
+}
