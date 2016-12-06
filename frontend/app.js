@@ -22,8 +22,8 @@ class App extends Component {
     if (this.props.current_user== null){
       return(
         <div>
-          <SignIn fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
-          <SignUp files={this.props.files} updateFiles={this.props.userActions.updateFiles} fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
+          <SignIn router={this.props.router} fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
+          <SignUp router={this.props.router} files={this.props.files} updateFiles={this.props.userActions.updateFiles} fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
         </div>
     )}
     return (
