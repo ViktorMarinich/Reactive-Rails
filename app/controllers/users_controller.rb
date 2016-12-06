@@ -28,8 +28,10 @@ class UsersController < ApplicationController
              :news =>{:include => [{
                 :user=>{:only => [:name,:id,:avatar]}},
                 :gallery=>{:include=> [:images=> {:only => [:image, :id]}]}],:only => [:id,:text]}},:only => :id}},
-         :gallery=>{:include=> [
-             :images=> {:only => [:image, :id]}],:only => :id}],
+         {:gallery=>{:include=> [
+             :images=> {:only => [:image, :id]}],:only => :id}},
+         {:incoming=>{:only => [:name,:id,:avatar]}},
+          :outcoming=>{:only => [:name,:id,:avatar]}],
       :only => [:name,:email,:id,:avatar] )
   end
 
