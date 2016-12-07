@@ -45,10 +45,7 @@ export default class News extends React.Component{
             </div> : null}
             <button id='create_news' onClick={this.createNews.bind(this)}>Send</button>
         </div>
-        <NewsList user={this.props.user}         setElements={this.props.setElements}
-          addElements={this.props.addElements} elements={this.props.elements}
-          isElements={this.props.isElements}
-                isNewElements={this.props.isNewElements}/>
+        <NewsList user={this.props.user} />
     </div>
     )
   }
