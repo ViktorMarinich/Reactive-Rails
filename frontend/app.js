@@ -17,8 +17,9 @@ class App extends Component {
     this.props.currentUserActions.destroySession()
   }
   render() {
+    const {children} = this.props
+    React.cloneElement(children, {current_user: 'a'})
     if (typeof this.props.current_user=='undefined') {return <div>Loading...</div>}
-    console.log("CU",this.props.current_user)
     if (this.props.current_user== null){
       return(
         <div>
@@ -27,10 +28,15 @@ class App extends Component {
         </div>
     )}
     return (
-      <div>
-        <Link to={`/user/${this.props.current_user.id}`}>My profile</Link>
-        <Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link>
-        <div>{this.props.children}</div>
+      <div style={{display: 'flex', width: '1000px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
+        <div style={{width: '200px', display: 'inline-block'}}>
+          <p><Link to={`/user/${this.props.current_user.id}`}>My profile</Link></p>
+          <p><Link to={`/settings`}>Settings</Link></p>
+          <p><Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link></p>
+        </div>
+        <div>{this.props.children && React.cloneElement(this.props.children, {current_user:
+            this.props.current_user, files: this.props.files, router: this.props.router,
+             updateFiles: this.props.userActions.updateFiles, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser})}</div>
       </div>
   );
   }
