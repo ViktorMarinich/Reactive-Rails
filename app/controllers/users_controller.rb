@@ -6,7 +6,8 @@ class UsersController < ApplicationController
 
   def current
     @user = current_user
-    render json:  @user.to_json( :include => {:friends => {:only => [:name,:id]}})
+    render json:  @user.to_json( :include => [{:friends => {:only => [:name,:id, :avatar]}},{:gallery=>{:include=> [
+        :images=> {:only => [:image, :id]}],:only => :id}}])
   end
 
   def create
