@@ -1,4 +1,4 @@
-export default function reducer(state={user: [], text: '',files: [],news_files: [] }, action) {
+export default function reducer(state={user: [], text: '',files: [],news_files: [] , elements:[], isElements:true}, action) {
     switch (action.type) {
       case "FETCH_USER": {
         return {...state, user: action.payload}
@@ -46,6 +46,18 @@ export default function reducer(state={user: [], text: '',files: [],news_files: 
       }
       case "DELETE_INCOMING": {
         return {...state, user:{...state.user, incoming: state.user.incoming.filter(friend => friend.id !== action.payload) } }
+        break;
+      }
+      case "SET_ELEMENTS": {
+        return {...state, elements: action.payload }
+        break;
+      }
+      case "ADD_ELEMENTS": {
+        return {...state, elements: [...state.elements.concat(action.payload)] }
+        break;
+      }
+      case "IS_NEW_ELEMENTS": {
+        return {...state, isElements: action.payload  }
         break;
       }
   }
