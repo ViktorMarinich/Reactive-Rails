@@ -8,6 +8,7 @@ import Profile from './Profile'
 import Gallery from './Gallery'
 import Friends from './Friends'
 import RelationshipRequest  from './RelationshipRequest'
+import { Link } from 'react-router';
 
 const style={
   menuItem: {width: '300px', display: 'inline-block'}
@@ -24,19 +25,17 @@ class User extends Component{
     }
   }
   render() {
-    console.log(this.props)
     return (
-      <div style={{display: 'flex', width: '1000px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
+      <div style={{display: 'flex', width: '770px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
         <div style={style.menuItem}>
           <Profile user={this.props.user}/>
           {(this.props.current_user.id!=this.props.user.id)? <RelationshipRequest  fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser} createRelationships={this.props.userActions.createRelationships} deleteFriend={this.props.userActions.deleteFriend} user={this.props.user}  current_user={this.props.current_user}/> :''}
           <Friends user={this.props.user} current_user={this.props.current_user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
         </div>
+
         <div style={style.menuItem}>
           <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
            updateGallery={this.props.userActions.updateGallery}/>
-        </div>
-        <div style={style.menuItem}>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
           text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}
         setElements={this.props.userActions.setElements} addElements={this.props.userActions.addElements}
