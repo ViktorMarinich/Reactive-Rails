@@ -95,3 +95,21 @@ export function deleteIncoming(value) {
     payload: value,
   }
 }
+export function setElements(value) {
+  return {
+    type: 'SET_ELEMENTS',
+    payload: value,
+  }
+}
+export function addElements(value) {
+  return {
+    type: 'ADD_ELEMENTS',
+    payload: value,
+  }
+}
+export function isNewElements(value) {
+  return {
+    type: 'IS_NEW_ELEMENTS',
+    payload: value,
+  }
+}
