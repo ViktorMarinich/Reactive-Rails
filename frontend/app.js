@@ -32,6 +32,7 @@ class App extends Component {
         <div style={{width: '200px', display: 'inline-block'}}>
           <p><Link to={`/user/${this.props.current_user.id}`}>My profile</Link></p>
           <p><Link to={`/settings`}>Settings</Link></p>
+          <p><Link to={`/friends`}>Friends</Link></p>
           <p><Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link></p>
         </div>
         <div>{this.props.children && React.cloneElement(this.props.children, {current_user:
