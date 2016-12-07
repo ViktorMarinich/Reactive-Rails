@@ -3,6 +3,7 @@ import React from 'react';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import App from './app'
 import User from './components/User';
+import Settings from './components/Settings';
 import { Provider } from 'react-redux'
 import store from './store'
 
@@ -12,8 +13,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={hashHistory}>
         <Route path='/' component={App}>
-          <Route path='/user/:userId' component={User} />
-        </Route>
+            <Route path='/settings' component={Settings}>
+            </Route>
+            <Route path='/user/:userId' component={User} />
+          </Route>
     </Router>
   </Provider>,
    document.getElementById('app'));
