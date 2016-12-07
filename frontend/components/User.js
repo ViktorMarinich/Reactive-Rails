@@ -29,7 +29,7 @@ class User extends Component{
       <div style={{display: 'flex', width: '1000px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
         <div style={style.menuItem}>
           <Profile user={this.props.user}/>
-          {(this.props.current_user.id!=this.props.user.id)? <RelationshipRequest  createRelationships={this.props.userActions.createRelationships} user={this.props.user}  current_user={this.props.current_user}/> :''}
+          {(this.props.current_user.id!=this.props.user.id)? <RelationshipRequest  fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser} createRelationships={this.props.userActions.createRelationships} deleteFriend={this.props.userActions.deleteFriend} user={this.props.user}  current_user={this.props.current_user}/> :''}
           <Friends user={this.props.user} current_user={this.props.current_user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
         </div>
         <div style={style.menuItem}>
