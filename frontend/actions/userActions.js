@@ -95,21 +95,9 @@ export function deleteIncoming(value) {
     payload: value,
   }
 }
-export function setElements(value) {
+export function setCounter(value) {
   return {
-    type: 'SET_ELEMENTS',
-    payload: value,
-  }
-}
-export function addElements(value) {
-  return {
-    type: 'ADD_ELEMENTS',
-    payload: value,
-  }
-}
-export function isNewElements(value) {
-  return {
-    type: 'IS_NEW_ELEMENTS',
+    type: 'SET_COUNTER',
     payload: value,
   }
 }
