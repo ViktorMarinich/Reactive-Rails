@@ -24,11 +24,13 @@ export default class Friends extends React.Component{
     })
     const incoming_list = (typeof incoming=='undefined')?'':incoming.map((friend)=>{
       return (
-        <div>
-          <h5>{friend.name}</h5>
+        <div key={friend.id} style={{display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start',alignItems: 'flex-start'}} >
+        <Link to={`/user/${friend.id}`}>
+        <img key={friend.id}  src={friend.avatar.smaller.url} style={{width: 72, height: 72}} ></img>
+        <h5 style={{ margin: '3px', textAlign: 'center'}}>{friend.name}</h5>
+        </Link>
           <button onClick={this.AddFriend.bind(this,friend)}>Add to friends</button>
-        </div>
-      )
+        </div>)
     })
     const outcoming_list = (typeof outcoming=='undefined')?'':outcoming.map(function(friend){
       return (
