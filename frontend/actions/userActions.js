@@ -56,9 +56,9 @@ export function updateNewsFiles(value) {
     payload: value,
   }
 }
-export function updateIncoming(id) {
+export function createRelationships(params) {
   return function(dispatch) {
-    axios.get(`/users/${id}`)
+    axios.post(`/relationships`,params)
       .then((response) => {
         dispatch({type: "UPDATE_INCOMING_REQUESTS", payload: response.data})
       })
