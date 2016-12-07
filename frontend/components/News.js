@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import Dropzone from 'react-dropzone';
+import NewsList from './NewsList'
 
 export default class News extends React.Component{
   createNews(){
@@ -25,28 +26,6 @@ export default class News extends React.Component{
     if (typeof user.wall == 'undefined'){
       return <div>Loading</div>
     }
-    const news=(typeof user.wall=='undefined')? '': user.wall.news.sort(  function(a, b) {
-    if (a.id > b.id) { return -1;}
-    if (a.id < b.id) { return 1; }
-      return 0; }).map( function (news) {
-        console.log(news)
-      let images=(typeof news.gallery == 'undefined')? '':news.gallery.images.map(function(image){
-        return <img key={image.id}  src={image.image.thumb.url} style={{padding: 1}}></img>
-      })
-      return  (
-      <div key={news.id} style={{borderStyle: 'solid', backgroundColor: 'white',borderWidth: '1px', marginTop: '5px', padding: '3px'}}>
-        <div style={{display: 'flex', flexDirection: 'row',borderBottomStyle: 'solid',borderBottomWidth: '1px', paddingBottom: '4px', justifyContent: 'flex-start',alignItems: 'flex-start'}}>
-          <img src='' style={{width: '50px', height: '50px'}}></img>
-          <h5 style={{paddingLeft: '5px', marginTop: '5px'}}>User: {(typeof news.user=='undefined')?'':news.user.name}</h5>
-        </div>
-        <div style={{display: 'flex',  flexDirection: 'column', alignItems:'flex-start', justifyContent: 'flex-start'}}>
-          <h3>{news.text}</h3>
-          <div>
-            {images}
-          </div>
-        </div>
-      </div>)
-    })
   return (
     <div className='border shadow'>
       <h3 className='align-center'>News</h3>
@@ -64,9 +43,12 @@ export default class News extends React.Component{
               {news_files.map((file) => <img src={file.preview} width="50" height="50"/>)}
             </div>
             </div> : null}
+            <button id='create_news' onClick={this.createNews.bind(this)}>Send</button>
         </div>
-      <button id='create_news' onClick={this.createNews.bind(this)}>Send</button>
-       {news}
+        <NewsList user={this.props.user}         setElements={this.props.setElements}
+          addElements={this.props.addElements} elements={this.props.elements}
+          isElements={this.props.isElements}
+                isNewElements={this.props.isNewElements}/>
     </div>
     )
   }
