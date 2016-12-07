@@ -76,7 +76,7 @@ export function deleteFriend(params) {
   return function(dispatch) {
     axios.post('/friends/destroy', params)
     .then((response) => {
-      dispatch({type: "DELETE_FRIEND", payload: response.data.user_id})
+      dispatch({type: "DELETE_FRIEND", payload: response.data.id})
     })
   }
 }
