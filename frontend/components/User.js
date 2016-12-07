@@ -38,9 +38,6 @@ class User extends Component{
            updateGallery={this.props.userActions.updateGallery}/>
         <News user={this.props.user} updateNews={this.props.userActions.updateNews}
           text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}
-        setElements={this.props.userActions.setElements} addElements={this.props.userActions.addElements}
-        isNewElements={this.props.userActions.isNewElements}  elements={this.props.elements}
-        isElements={this.props.isElements}
           news_files={this.props.news_files} updateNewsFiles={this.props.userActions.updateNewsFiles}/>
         </div>
       </div>
@@ -52,8 +49,6 @@ function mapStateToProps(state) {
     user: state.user.user,
     text: state.user.text,
     files: state.user.files,
-    elements: state.user.elements,
-    isElements: state.user.isElements,
     news_files: state.user.news_files,
     current_user: state.currentUser.currentUser,
   }
