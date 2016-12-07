@@ -18,7 +18,7 @@ class App extends Component {
   }
   render() {
     const {children} = this.props
-    React.cloneElement(children, {current_user: 'a'})
+
     if (typeof this.props.current_user=='undefined') {return <div>Loading...</div>}
     if (this.props.current_user== null){
       return(
@@ -35,9 +35,9 @@ class App extends Component {
           <p><Link to={`/friends`}>Friends</Link></p>
           <p><Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link></p>
         </div>
-        <div>{this.props.children && React.cloneElement(this.props.children, {current_user:
-            this.props.current_user, files: this.props.files, router: this.props.router,
-             updateFiles: this.props.userActions.updateFiles, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser})}</div>
+        <div>{this.props.children&& React.cloneElement(this.props.children, {current_user:
+            this.props.current_user, files: this.props.files, router: this.props.router, counter: this.props.counter,
+             updateFiles: this.props.userActions.updateFiles,setCounter: this.props.userActions.setCounter, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser})}</div>
       </div>
   );
   }
@@ -46,6 +46,7 @@ function mapStateToProps(state) {
   return {
     current_user: state.currentUser.currentUser,
     files: state.user.files,
+    counter: state.user.counter,
   }
 }
 
