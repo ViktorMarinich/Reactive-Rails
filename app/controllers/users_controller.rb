@@ -20,6 +20,18 @@ class UsersController < ApplicationController
       end
     end
   end
+  def update
+    @user = User.find(params[:id])
+    respond_to do |format|
+      format.json do
+        if @user.update(user_params)
+          render :json => @user.to_json
+        else
+          render :json => { :errors => @user.errors.messages }
+        end
+      end
+    end
+  end
 
   def show
     @user = User.find(params[:id])
