@@ -3,7 +3,9 @@ import axios from "axios";
 import { Link } from 'react-router';
 
 export default class RelationshipRequest extends React.Component{
-
+  SendInvite(){
+    this.props.createRelationships({friend_id: this.props.user.id})
+  }
   render() {
     const {current_user, user} = this.props
     const friends_length = (typeof current_user.friends.length=='undefined')? 0 : current_user.friends.length
@@ -26,7 +28,7 @@ export default class RelationshipRequest extends React.Component{
     return (
       <div>
          {(outcoming_requests)? <h5>You already send friend request to {user.name}</h5> :
-          <button>Add to friends</button>}
+          <button onClick={this.SendInvite.bind(this)}>Add to friends</button>}
       </div>
     );
   }
