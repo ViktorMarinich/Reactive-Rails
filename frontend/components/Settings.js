@@ -31,7 +31,7 @@ export default class Settings extends React.Component{
     const {current_user,files} = this.props
     return (
       <div style={{display: 'flex', width: '770px', backgroundColor: 'grey',flexDirection: 'column',alignContent: 'space-around', justifyContent: 'space-around'}}>
-        <h3 style={{textAlign: 'center'}}>Profile info</h3>
+        <h3 style={{textAlign: 'center'}}>Settings</h3>
         <div>
           <h3>Name</h3>
           <p><input type='text' ref='name' defaultValue={current_user.name}/></p>
