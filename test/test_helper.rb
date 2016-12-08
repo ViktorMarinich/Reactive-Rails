@@ -16,6 +16,14 @@ include Rails.application.routes.url_helpers
 class ActiveSupport::TestCase
   fixtures :all
   include Capybara::DSL
+
+  def login(user)
+    old_controller = @controller
+    @controller = SessionsController.new
+    post :create, session: { email:  user.email, password: 'aaaa' }
+    @controller = old_controller
+  end
+
 end
 
 class   ActionDispatch::IntegrationTest < ActiveSupport::TestCase
