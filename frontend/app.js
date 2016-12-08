@@ -34,11 +34,12 @@ class App extends Component {
           <p><Link to={`/settings`}>Settings</Link></p>
           <p><Link to={`/friends`}>Friends</Link></p>
           <p><Link to={`/gallery`}>Gallery</Link></p>
+          <p><Link to={`/news`}>News</Link></p>
           <p><Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link></p>
         </div>
         <div>{this.props.children&& React.cloneElement(this.props.children, {current_user:
             this.props.current_user, files: this.props.files, router: this.props.router, counter: this.props.counter,
-             updateFiles: this.props.userActions.updateFiles,setCounter: this.props.userActions.setCounter, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser})}</div>
+             updateFiles: this.props.userActions.updateFiles,allNews: this.props.allNews, fetchNews: this.props.currentUserActions.fetchNews,setCounter: this.props.userActions.setCounter, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser})}</div>
       </div>
   );
   }
@@ -46,6 +47,7 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     current_user: state.currentUser.currentUser,
+    allNews: state.currentUser.allNews,
     files: state.user.files,
     counter: state.user.counter,
   }
