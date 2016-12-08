@@ -31,7 +31,7 @@ export default class GalleryPage extends React.Component{
      return   <img key={image.id}  src={image.image.url} style={{width: '700px'}} ></img>
      })
     return (
-      <div>
+      <div style={{width: '770px' }}>
         <h1 style={{ textAlign: 'center'}}>Friends</h1>
         <div style={{display: 'flex', width: '770px', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
           {images}

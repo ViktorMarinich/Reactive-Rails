@@ -28,7 +28,7 @@ export default class FriendList extends React.Component{
   render() {
     const current_user= this.props.current_user
     const friends = this.props.current_user.friends.slice(0,this.props.counter).map((friend)=>{
-     return <div key={friend.id} >
+     return <div key={friend.id}>
        <Link to={`/user/${friend.id}`}>
         <div style={{display: 'flex', marginTop: '10px', paddingLeft: '20px', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-around'}} >
        <img key={friend.id}  src={friend.avatar.small.url} style={{width: 85, height: 85}} ></img>
@@ -39,7 +39,7 @@ export default class FriendList extends React.Component{
      })
      let i=1
     return (
-      <div>
+      <div  style={{width: '770px' }}>
         <h1 style={{ textAlign: 'center'}}>Friends</h1>
         <div style={{display: 'flex', width: '770px', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
           {friends}
