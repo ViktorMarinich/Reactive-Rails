@@ -34,9 +34,9 @@ export default class Settings extends React.Component{
         <h3 style={{textAlign: 'center'}}>Settings</h3>
         <div>
           <h3>Name</h3>
-          <p><input type='text' ref='name' defaultValue={current_user.name}/></p>
+          <p><input type='text' id='edit_name' ref='name' defaultValue={current_user.name}/></p>
           <h3>Email</h3>
-          <p><input type='text' ref='email' defaultValue={current_user.email}/></p>
+          <p><input type='text' id='edit_email' ref='email' defaultValue={current_user.email}/></p>
           <h3>Avatar</h3>
           <img src={current_user.avatar.smaller.url}></img>
           <Dropzone ref="dropzone" style={{display: 'none'}}  onDrop={this.onDrop.bind(this)} >
@@ -51,7 +51,7 @@ export default class Settings extends React.Component{
               {files.map((file) => <img  src={file.preview} width="50" height="50"/>)}
             </div>
             </div> : null}
-          <p><button id='create_news' onClick={this.updateSettings.bind(this)}>Save</button></p>
+          <p><button id='save_changes' onClick={this.updateSettings.bind(this)}>Save</button></p>
         </div>
       </div>
     );
