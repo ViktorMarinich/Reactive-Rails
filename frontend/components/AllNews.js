@@ -30,8 +30,7 @@ export default class AllNews extends React.Component{
   render() {
     console.log(this.props)
     const current_user= this.props.current_user
-    let revert= 0 - this.props.counter
-    const news = this.props.allNews.slice(revert).sort(  function(a, b) {
+    const news = (typeof this.props.allNews =='undefined')?'': this.props.allNews.slice(0,this.props.counter).sort(  function(a, b) {
           if (a.id > b.id) { return -1;}
           if (a.id < b.id) { return 1; }
           return 0; }).map((news)=>{
@@ -41,8 +40,8 @@ export default class AllNews extends React.Component{
      let i=1
     return (
       <div  style={{width: '770px' }}>
-        <h1 style={{ textAlign: 'center'}}>Friends</h1>
-        <div style={{display: 'flex', width: '770px', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
+        <h1 style={{ textAlign: 'center'}}>News</h1>
+        <div style={{display: 'flex', paddingLeft: '20px', width: '300px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
           {news}
         </div>
       </div>
