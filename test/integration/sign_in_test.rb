@@ -15,8 +15,7 @@ class UsersTest < ActionDispatch::IntegrationTest
     page.fill_in "email", :with => @user.email
     page.fill_in "password", :with => "aaaa"
     page.find('button[id="sign_in"]').click
-    click_on "My profile"
-    assert page.has_content?("Welcome to User Profile")
+    assert page.has_content?(@user.name)
     click_on "Sign Out"
     assert page.has_content?("Sign in")
     assert page.has_content?("Sign Up")
