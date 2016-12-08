@@ -1,6 +1,11 @@
 class NewsController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
+  def index
+    @news = News.where(wall_id: Wall.where(user_id: current_user.user_and_friends_ids))
+    render :json => @news.to_json(:include => [:user=>{:only => [:name,:email,:id, :avatar]},:gallery=>{:include=> {:images=> [:only => :image, :id]}}])
+  end
+
   def create
     @user=User.find(params[:id])
     @wall=@user.wall
