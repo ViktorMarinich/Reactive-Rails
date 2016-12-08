@@ -11,6 +11,9 @@ export default class News extends React.Component{
     data.append('news[text]', this.props.text)
     this.props.updateNews(data)
     this.props.updateNewsText('')
+    this.props.updateNewsFiles([]);
+    this.refs.video.style.display='none'
+    this.refs.video.src=''
   }
   onDrop(files) {
     this.props.updateNewsFiles(files);
@@ -20,6 +23,19 @@ export default class News extends React.Component{
   }
   changeContent = (e) => {
     this.props.updateNewsText( e.target.value)
+    const url = e.target.value
+    if (url != undefined || url != '') {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        console.log(match)
+        if (match && match[2].length >= 11&&(typeof match[2][11]=='undefined' || match[2][11] == ' ')) {
+          this.refs.video.style.display=''
+          this.refs.video.src=`https://www.youtube.com/embed/${match[2].slice(0,11)}?autoplay=0`
+        } else {
+          this.refs.video.style.display='none'
+          this.refs.video.src=''
+        }
+    }
   }
   render() {
     const {news_files, user}=this.props
@@ -45,6 +61,7 @@ export default class News extends React.Component{
             </div> : null}
             <button id='create_news' onClick={this.createNews.bind(this)}>Send</button>
         </div>
+        <iframe ref='video' id="videoObject" style={{ display: 'none'}}  type="text/html" width="300" height="300" frameBorder="0" allowFullScreen></iframe>
         <NewsList user={this.props.user} prevParams={this.props.prevParams} setPrevParams={this.props.setPrevParams} counter={this.props.counter} setCounter={this.props.setCounter} />
     </div>
     )
