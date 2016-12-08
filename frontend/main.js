@@ -6,6 +6,7 @@ import User from './components/User';
 import Settings from './components/Settings';
 import FriendList from './components/FriendList';
 import GalleryPage from './components/GalleryPage';
+import AllNews from './components/AllNews';
 import { Provider } from 'react-redux'
 import store from './store'
 
@@ -18,6 +19,7 @@ ReactDOM.render(
             <Route path='/settings' component={Settings}/>
             <Route path='/gallery' component={GalleryPage}/>
             <Route path='/friends' component={FriendList}/>
+            <Route path='/news' component={AllNews}/>
             <Route path='/user/:userId' component={User} />
           </Route>
     </Router>
