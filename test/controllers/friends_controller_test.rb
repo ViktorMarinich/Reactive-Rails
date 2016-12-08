@@ -17,6 +17,8 @@ class FriendsControllerTest < ActionController::TestCase
     assert_response :success
     friend = JSON.parse(@response.body)
     assert_equal @user4.name, friend["name"]
+    @friendship =  Friendship.find_by(friend_id: @user4.id)
+    assert @friendship
     assert @user3.friends.find_by(id: @user4.id)
     assert @user4.friends.find_by(id: @user3.id)
     assert_equal @friendship.user_id,  @user3.id
