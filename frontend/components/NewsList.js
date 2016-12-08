@@ -1,60 +1,52 @@
 import React from 'react';
 import axios from "axios";
 import Dropzone from 'react-dropzone';
-import Infinite from 'react-infinite';
 import NewsItem from './NewsItem'
 
 export default class  NewsList  extends React.Component{
   constructor(props){
     super(props);
-      this.LoadMore=this.LoadMore.bind(this)
-      this.infiniteLoad = this.infiniteLoad.bind(this)
+    this.infiniteLoad = this.infiniteLoad.bind(this)
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user.id!= this.props.prevParams){
+      this.props.setPrevParams(nextProps.user.id)
+      this.props.setCounter(10)
+    }
   }
   componentWillMount(){
-      this.props.setElements(this.buildElements(0,3))
+      this.props.setPrevParams(this.props.user.id)
+      this.props.setCounter(10)
     }
   componentDidMount(){
     window.addEventListener('scroll', this.infiniteLoad);
   }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.infiniteLoad);
-}
-    LoadMore() {
-        const elemLength = this.props.elements.length;
-        const  newElements = this.buildElements(elemLength, elemLength + 1);
-        this.props.addElements(newElements)
-    }
-      buildElements(start, end) {
-        let elements = [];
-        let news=this.props.user.wall.news.sort(  function(a, b) {
-          if (a.id > b.id) { return -1;}
-          if (a.id < b.id) { return 1; }
-          return 0; })
-        if(!news[end]){this.props.isNewElements(false)}
-        for (let i = start; i < end; i++) {
-          if (news[i]){
-            elements.push(<NewsItem news={news[i]} key={news[i].id} current_user={this.props.current_user} id={news[i].user_id}
-              name={news[i].user.name} url={news[i].user.avatar.url} text={news[i].text}  />)
-        }
+  }
+  LoadMore() {
+    this.props.setCounter(this.props.counter+5)
+  }
 
-      }
-          return elements;
-      }
-     infiniteLoad(){
-       if (!this.props.isElements){ return false}
-       const height = document.getElementsByTagName('body')[0].clientHeight - (window.innerHeight + window.pageYOffset)
-         if (height< 60){
-         this.LoadMore()
-       }
-
-     }
+  infiniteLoad(){
+   const height = document.getElementsByTagName('body')[0].clientHeight - (window.innerHeight + window.pageYOffset)
+     if (height< 60){this.LoadMore()}
+  }
     render() {
+      console.log (this.props.counter)
      const current_user= this.props.current_user
+     let revert= 0 - this.props.counter
+     const news = this.props.user.wall.news.slice(revert).sort(  function(a, b) {
+           if (a.id > b.id) { return -1;}
+           if (a.id < b.id) { return 1; }
+           return 0; }).map((news)=>{
+       return<NewsItem news={news} key={news.id} current_user={this.props.current_user} id={news.user_id}
+              name={news.user.name} url={news.user.avatar.url} text={news.text}  />
+     })
     return (
-      <div className='border shadow' >
-        <h3 className='align-center'>News</h3>
-         {this.props.elements}
-         {(this.props.isElements)? <button className='margin' type="button" onClick={this.LoadMore}>Load more</button>:''}
+        <div>
+          <h3>News</h3>
+          {news}
         </div>
       )
     }
