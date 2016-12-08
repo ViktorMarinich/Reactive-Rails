@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   has_many :friends, through: :friendships
   mount_uploader :avatar, ImageUploader
   has_secure_password
+  validates :name , length: { minimum: 4 , maximum: 12}
+  validates :email, presence: true, uniqueness: {case_sensitive: false}, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}
 
   def user_and_friends_ids
     x= self.friend_ids
