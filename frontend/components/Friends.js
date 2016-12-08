@@ -14,9 +14,9 @@ export default class Friends extends React.Component{
     const friend_list = (typeof friends=='undefined')?'':friends.slice(0,9).map((friend)=>{
 
       return (
-        <div style={{display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start',alignItems: 'flex-start'}} >
+        <div key={friend.id} style={{display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start',alignItems: 'flex-start'}} >
         <Link to={`/user/${friend.id}`}>
-        <img key={friend.id}  src={friend.avatar.smaller.url} style={{width: 72, height: 72}} ></img>
+        <img   src={friend.avatar.smaller.url} style={{width: 72, height: 72}} ></img>
         <h5 style={{ margin: '3px', textAlign: 'center'}}>{friend.name}</h5>
         </Link>
         </div>)
