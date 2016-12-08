@@ -8,21 +8,7 @@ class NewsControllerTest < ActionController::TestCase
     @news2=news(:news2)
   end
 
-  def test_create_news_with_images
-    login(@user)
-    assert_difference('News.count',1) do
-      post :create, id: @user, news: { text: "some text"},
-         image: [Rails.root.join("public/images/fallback/default.png").open,
-         Rails.root.join("public/images/fallback/default.png").open ]
-    end
-    assert_response :success
-    news = JSON.parse(@response.body)
-    assert_instance_of(Hash, news)
-    assert_equal "some text", news['text']
-    assert_equal "/images/fallback/default.png", news['gallery']['images'][0]['image']['url']
-  end
-
-  def test_create_news_without_images
+  def test_create_news
     login(@user)
     assert_difference('News.count',1) do
       post :create, id: @user, news: { text: "some text"}
