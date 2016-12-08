@@ -101,3 +101,9 @@ export function setCounter(value) {
     payload: value,
   }
 }
+export function setPrevParams(value) {
+  return {
+    type: 'SET_PREV_PARAMS',
+    payload: value,
+  }
+}
