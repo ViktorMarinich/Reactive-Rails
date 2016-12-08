@@ -32,7 +32,7 @@ export default class GalleryPage extends React.Component{
      })
     return (
       <div style={{width: '770px' }}>
-        <h1 style={{ textAlign: 'center'}}>Friends</h1>
+        <h1 style={{ textAlign: 'center'}}>Gallery</h1>
         <div style={{display: 'flex', width: '770px', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
           {images}
         </div>
