@@ -50,6 +50,11 @@ export default function reducer(state={user: [], text: '',files: [],news_files: 
       }
       case "SET_COUNTER": {
         return {...state,  counter: action.payload }
+        break;
+      }
+      case "SET_PREV_PARAMS": {
+        return {...state,  prevParams: action.payload }
+        break;
       }
   }
     return state
