@@ -68,7 +68,7 @@ class UsersControllerTest < ActionController::TestCase
   def test_fetch_current_user_without_login
     get :current
     assert_response :success
-    assert_equal assigns(:current_user), nil
+    assert_nil assigns(:current_user)
   end
 
   def test_fetch_current_user
