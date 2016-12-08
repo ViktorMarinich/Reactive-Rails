@@ -16,4 +16,10 @@ module ApplicationHelper
     return false unless user_signed_in?
     session[:user_id] = nil
   end
+
+  def authenticate
+    unless user_signed_in?
+      head(403)
+    end
+  end
 end
