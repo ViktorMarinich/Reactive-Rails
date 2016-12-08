@@ -36,7 +36,7 @@ class User extends Component{
         <div style={style.menuItem}>
           <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
            updateGallery={this.props.userActions.updateGallery}/>
-        <News user={this.props.user} updateNews={this.props.userActions.updateNews}
+         <News user={this.props.user} counter={this.props.counter} prevParams={this.props.prevParams} setPrevParams={this.props.userActions.setPrevParams} setCounter={this.props.userActions.setCounter} updateNews={this.props.userActions.updateNews}
           text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}
           news_files={this.props.news_files} updateNewsFiles={this.props.userActions.updateNewsFiles}/>
         </div>
@@ -49,6 +49,8 @@ function mapStateToProps(state) {
     user: state.user.user,
     text: state.user.text,
     files: state.user.files,
+    counter: state.user.counter,
+    prevParams: state.user.prevParams,
     news_files: state.user.news_files,
     current_user: state.currentUser.currentUser,
   }
