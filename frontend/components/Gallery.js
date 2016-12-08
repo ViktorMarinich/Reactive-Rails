@@ -20,6 +20,7 @@ export default class Gallery extends React.Component{
      this.refs.dropzone.open();
   }
   render() {
+    let i=0;
     const {files, user}=this.props
     const gallery= (typeof this.props.user.gallery =='undefined')?'':this.props.user.gallery.images.map(function(image){
     return <img key={image.id} className="padding inline-block" src={image.image.smaller.url} style={{width: 72, height: 72}} ></img>
@@ -37,7 +38,9 @@ export default class Gallery extends React.Component{
           <button  onClick={this.uploadImages.bind(this)}>Upload files</button>
           <h4>You add {files.length} images.</h4>
           <div >
-            {files.map((file) => <img  src={file.preview} width="50" height="50"/>)}
+            {files.map((file) =>
+            { i=i+1
+            return  <img key={i} src={file.preview} width="50" height="50"/>})}
           </div>
           </div> : null}
       </div>
