@@ -13,7 +13,6 @@ class UsersTest < ActionDispatch::IntegrationTest
 
   def test_news_on_user_wall
     sign_in
-    click_on "My profile"
     assert page.has_content?("News")
     assert page.has_selector?('textarea',:count => 1)
     assert page.has_selector?('button')
@@ -25,11 +24,23 @@ class UsersTest < ActionDispatch::IntegrationTest
 
   def test_user_info_on_profile_page
     sign_in
-    click_on "My profile"
-    assert page.has_selector?('img',:count => 1)
+    assert page.has_selector?('img')
     assert page.has_content?("Profile info")
     assert page.has_content?(@user.name)
     assert page.has_content?(@user.email)
+    click_on "Sign Out"
+  end
+
+  def test_settings_page
+    sign_in
+    click_on 'Settings'
+    assert page.has_selector?('input',:count => 2)
+    assert page.has_content?("Settings")
+    page.fill_in "edit_name", :with => "edited name"
+    page.fill_in "edit_email", :with => "edited@email.now"
+    page.find('button[id="save_changes"]').click
+    assert page.has_content?("edited name")
+    assert page.has_content?("edited@email.now")
     click_on "Sign Out"
   end
 
