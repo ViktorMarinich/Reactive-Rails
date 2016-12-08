@@ -64,9 +64,17 @@
 
 	var _User2 = _interopRequireDefault(_User);
 
+	var _Settings = __webpack_require__(318);
+
+	var _Settings2 = _interopRequireDefault(_Settings);
+
+	var _FriendList = __webpack_require__(319);
+
+	var _FriendList2 = _interopRequireDefault(_FriendList);
+
 	var _reactRedux = __webpack_require__(268);
 
-	var _store = __webpack_require__(316);
+	var _store = __webpack_require__(320);
 
 	var _store2 = _interopRequireDefault(_store);
 
@@ -83,6 +91,8 @@
 	      _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/', component: _app2.default },
+	        _react2.default.createElement(_reactRouter.Route, { path: '/settings', component: _Settings2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/friends', component: _FriendList2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/user/:userId', component: _User2.default })
 	      )
 	    )
@@ -26849,6 +26859,9 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var children = this.props.children;
+
+
 	      if (typeof this.props.current_user == 'undefined') {
 	        return _react2.default.createElement(
 	          'div',
@@ -26856,32 +26869,62 @@
 	          'Loading...'
 	        );
 	      }
-	      console.log("CU", this.props.current_user);
 	      if (this.props.current_user == null) {
 	        return _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_SignIn2.default, { fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser }),
-	          _react2.default.createElement(_SignUp2.default, { files: this.props.files, updateFiles: this.props.userActions.updateFiles, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser })
+	          _react2.default.createElement(_SignIn2.default, { router: this.props.router, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser }),
+	          _react2.default.createElement(_SignUp2.default, { router: this.props.router, files: this.props.files, updateFiles: this.props.userActions.updateFiles, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser })
 	        );
 	      }
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { style: { display: 'flex', width: '1000px', backgroundColor: 'grey', flexDirection: 'row', justifyContent: 'space-around' } },
 	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/user/' + this.props.current_user.id },
-	          'My profile'
-	        ),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/', onClick: this.SignOut.bind(this) },
-	          'Sign Out'
+	          'div',
+	          { style: { width: '200px', display: 'inline-block' } },
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '/user/' + this.props.current_user.id },
+	              'My profile'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '/settings' },
+	              'Settings'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '/friends' },
+	              'Friends'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '/', onClick: this.SignOut.bind(this) },
+	              'Sign Out'
+	            )
+	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          this.props.children
+	          this.props.children && _react2.default.cloneElement(this.props.children, { current_user: this.props.current_user, files: this.props.files, router: this.props.router, counter: this.props.counter,
+	            updateFiles: this.props.userActions.updateFiles, setCounter: this.props.userActions.setCounter, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser })
 	        )
 	      );
 	    }
@@ -26893,7 +26936,8 @@
 	function mapStateToProps(state) {
 	  return {
 	    current_user: state.currentUser.currentUser,
-	    files: state.user.files
+	    files: state.user.files,
+	    counter: state.user.counter
 	  };
 	}
 
@@ -26952,6 +26996,7 @@
 	      var password = this.refs.password.value;
 	      _axios2.default.post('/sessions', { session: { email: email, password: password } }).then(function (response) {
 	        _this2.props.fetchCurrentUser();
+	        _this2.props.router.push('user/' + response.data.id);
 	      });
 	    }
 	  }, {
@@ -28542,6 +28587,7 @@
 	      data.append('user[password_confirmation]', this.refs.password_confirmation.value);
 	      _axios2.default.post('/users', data).then(function (response) {
 	        _this2.props.fetchCurrentUser();
+	        _this2.props.router.push('user/' + response.data.id);
 	      });
 	    }
 	  }, {
@@ -31198,11 +31244,13 @@
 	exports.updateFiles = updateFiles;
 	exports.updateGallery = updateGallery;
 	exports.updateNewsFiles = updateNewsFiles;
-	exports.updateIncoming = updateIncoming;
+	exports.createRelationships = createRelationships;
 	exports.updateOutcoming = updateOutcoming;
 	exports.deleteFriend = deleteFriend;
 	exports.addFriend = addFriend;
 	exports.deleteIncoming = deleteIncoming;
+	exports.setCounter = setCounter;
+	exports.setPrevParams = setPrevParams;
 
 	var _axios = __webpack_require__(241);
 
@@ -31262,9 +31310,9 @@
 	    payload: value
 	  };
 	}
-	function updateIncoming(id) {
+	function createRelationships(params) {
 	  return function (dispatch) {
-	    _axios2.default.get("/users/" + id).then(function (response) {
+	    _axios2.default.post("/relationships", params).then(function (response) {
 	      dispatch({ type: "UPDATE_INCOMING_REQUESTS", payload: response.data });
 	    });
 	  };
@@ -31279,7 +31327,7 @@
 	function deleteFriend(params) {
 	  return function (dispatch) {
 	    _axios2.default.post('/friends/destroy', params).then(function (response) {
-	      dispatch({ type: "DELETE_FRIEND", payload: response.data.user_id });
+	      dispatch({ type: "DELETE_FRIEND", payload: response.data.id });
 	    });
 	  };
 	}
@@ -31294,6 +31342,18 @@
 	function deleteIncoming(value) {
 	  return {
 	    type: 'DELETE_INCOMING',
+	    payload: value
+	  };
+	}
+	function setCounter(value) {
+	  return {
+	    type: 'SET_COUNTER',
+	    payload: value
+	  };
+	}
+	function setPrevParams(value) {
+	  return {
+	    type: 'SET_PREV_PARAMS',
 	    payload: value
 	  };
 	}
@@ -31330,21 +31390,23 @@
 
 	var _News2 = _interopRequireDefault(_News);
 
-	var _Profile = __webpack_require__(312);
+	var _Profile = __webpack_require__(314);
 
 	var _Profile2 = _interopRequireDefault(_Profile);
 
-	var _Gallery = __webpack_require__(313);
+	var _Gallery = __webpack_require__(315);
 
 	var _Gallery2 = _interopRequireDefault(_Gallery);
 
-	var _Friends = __webpack_require__(314);
+	var _Friends = __webpack_require__(316);
 
 	var _Friends2 = _interopRequireDefault(_Friends);
 
-	var _RelationshipRequest = __webpack_require__(315);
+	var _RelationshipRequest = __webpack_require__(317);
 
 	var _RelationshipRequest2 = _interopRequireDefault(_RelationshipRequest);
+
+	var _reactRouter = __webpack_require__(183);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -31385,27 +31447,22 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props);
 	      return _react2.default.createElement(
 	        'div',
-	        { style: { display: 'flex', width: '1000px', backgroundColor: 'grey', flexDirection: 'row', justifyContent: 'space-around' } },
+	        { style: { display: 'flex', width: '770px', backgroundColor: 'grey', flexDirection: 'row', justifyContent: 'space-around' } },
 	        _react2.default.createElement(
 	          'div',
 	          { style: style.menuItem },
 	          _react2.default.createElement(_Profile2.default, { user: this.props.user }),
-	          this.props.current_user.id != this.props.user.id ? _react2.default.createElement(_RelationshipRequest2.default, { user: this.props.user, current_user: this.props.current_user }) : '',
+	          this.props.current_user.id != this.props.user.id ? _react2.default.createElement(_RelationshipRequest2.default, { fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser, createRelationships: this.props.userActions.createRelationships, deleteFriend: this.props.userActions.deleteFriend, user: this.props.user, current_user: this.props.current_user }) : '',
 	          _react2.default.createElement(_Friends2.default, { user: this.props.user, current_user: this.props.current_user, addFriend: this.props.userActions.addFriend, deleteIncoming: this.props.userActions.deleteIncoming })
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { style: style.menuItem },
 	          _react2.default.createElement(_Gallery2.default, { user: this.props.user, files: this.props.files, updateFiles: this.props.userActions.updateFiles,
-	            updateGallery: this.props.userActions.updateGallery })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { style: style.menuItem },
-	          _react2.default.createElement(_News2.default, { user: this.props.user, updateNews: this.props.userActions.updateNews,
+	            updateGallery: this.props.userActions.updateGallery }),
+	          _react2.default.createElement(_News2.default, { user: this.props.user, counter: this.props.counter, prevParams: this.props.prevParams, setPrevParams: this.props.userActions.setPrevParams, setCounter: this.props.userActions.setCounter, updateNews: this.props.userActions.updateNews,
 	            text: this.props.text, updateNewsText: this.props.userActions.updateNewsText,
 	            news_files: this.props.news_files, updateNewsFiles: this.props.userActions.updateNewsFiles })
 	        )
@@ -31421,6 +31478,8 @@
 	    user: state.user.user,
 	    text: state.user.text,
 	    files: state.user.files,
+	    counter: state.user.counter,
+	    prevParams: state.user.prevParams,
 	    news_files: state.user.news_files,
 	    current_user: state.currentUser.currentUser
 	  };
@@ -31459,6 +31518,10 @@
 	var _reactDropzone = __webpack_require__(267);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
+
+	var _NewsList = __webpack_require__(312);
+
+	var _NewsList2 = _interopRequireDefault(_NewsList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31523,49 +31586,6 @@
 	          'Loading'
 	        );
 	      }
-	      var news = typeof user.wall == 'undefined' ? '' : user.wall.news.sort(function (a, b) {
-	        if (a.id > b.id) {
-	          return -1;
-	        }
-	        if (a.id < b.id) {
-	          return 1;
-	        }
-	        return 0;
-	      }).map(function (news) {
-	        console.log(news);
-	        var images = typeof news.gallery == 'undefined' ? '' : news.gallery.images.map(function (image) {
-	          return _react2.default.createElement('img', { key: image.id, src: image.image.thumb.url, style: { padding: 1 } });
-	        });
-	        return _react2.default.createElement(
-	          'div',
-	          { key: news.id, style: { borderStyle: 'solid', backgroundColor: 'white', borderWidth: '1px', marginTop: '5px', padding: '3px' } },
-	          _react2.default.createElement(
-	            'div',
-	            { style: { display: 'flex', flexDirection: 'row', borderBottomStyle: 'solid', borderBottomWidth: '1px', paddingBottom: '4px', justifyContent: 'flex-start', alignItems: 'flex-start' } },
-	            _react2.default.createElement('img', { src: '', style: { width: '50px', height: '50px' } }),
-	            _react2.default.createElement(
-	              'h5',
-	              { style: { paddingLeft: '5px', marginTop: '5px' } },
-	              'User: ',
-	              typeof news.user == 'undefined' ? '' : news.user.name
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' } },
-	            _react2.default.createElement(
-	              'h3',
-	              null,
-	              news.text
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              null,
-	              images
-	            )
-	          )
-	        );
-	      });
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'border shadow' },
@@ -31613,14 +31633,14 @@
 	                return _react2.default.createElement('img', { src: file.preview, width: '50', height: '50' });
 	              })
 	            )
-	          ) : null
+	          ) : null,
+	          _react2.default.createElement(
+	            'button',
+	            { id: 'create_news', onClick: this.createNews.bind(this) },
+	            'Send'
+	          )
 	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { id: 'create_news', onClick: this.createNews.bind(this) },
-	          'Send'
-	        ),
-	        news
+	        _react2.default.createElement(_NewsList2.default, { user: this.props.user, prevParams: this.props.prevParams, setPrevParams: this.props.setPrevParams, counter: this.props.counter, setCounter: this.props.setCounter })
 	      );
 	    }
 	  }]);
@@ -31632,6 +31652,212 @@
 
 /***/ },
 /* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(182);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _reactDropzone = __webpack_require__(267);
+
+	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
+
+	var _NewsItem = __webpack_require__(313);
+
+	var _NewsItem2 = _interopRequireDefault(_NewsItem);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NewsList = function (_React$Component) {
+	  _inherits(NewsList, _React$Component);
+
+	  function NewsList(props) {
+	    _classCallCheck(this, NewsList);
+
+	    var _this = _possibleConstructorReturn(this, (NewsList.__proto__ || Object.getPrototypeOf(NewsList)).call(this, props));
+
+	    _this.infiniteLoad = _this.infiniteLoad.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(NewsList, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.user.id != this.props.prevParams) {
+	        this.props.setPrevParams(nextProps.user.id);
+	        this.props.setCounter(10);
+	      }
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.setPrevParams(this.props.user.id);
+	      this.props.setCounter(10);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'LoadMore',
+	    value: function LoadMore() {
+	      this.props.setCounter(this.props.counter + 5);
+	    }
+	  }, {
+	    key: 'infiniteLoad',
+	    value: function infiniteLoad() {
+	      var height = document.getElementsByTagName('body')[0].clientHeight - (window.innerHeight + window.pageYOffset);
+	      if (height < 60) {
+	        this.LoadMore();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      console.log(this.props.counter);
+	      var current_user = this.props.current_user;
+	      var revert = 0 - this.props.counter;
+	      var news = this.props.user.wall.news.slice(revert).sort(function (a, b) {
+	        if (a.id > b.id) {
+	          return -1;
+	        }
+	        if (a.id < b.id) {
+	          return 1;
+	        }
+	        return 0;
+	      }).map(function (news) {
+	        return _react2.default.createElement(_NewsItem2.default, { news: news, key: news.id, current_user: _this2.props.current_user, id: news.user_id,
+	          name: news.user.name, url: news.user.avatar.url, text: news.text });
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'News'
+	        ),
+	        news
+	      );
+	    }
+	  }]);
+
+	  return NewsList;
+	}(_react2.default.Component);
+
+	exports.default = NewsList;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(182);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(183);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NewsItem = function (_React$Component) {
+	  _inherits(NewsItem, _React$Component);
+
+	  function NewsItem() {
+	    _classCallCheck(this, NewsItem);
+
+	    return _possibleConstructorReturn(this, (NewsItem.__proto__ || Object.getPrototypeOf(NewsItem)).apply(this, arguments));
+	  }
+
+	  _createClass(NewsItem, [{
+	    key: 'is_undefiend',
+	    value: function is_undefiend(el) {
+	      return typeof el != 'undefined' ? el : "";
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var images = typeof this.props.news.gallery == 'undefined' ? '' : this.props.news.gallery.images.map(function (image) {
+	        return _react2.default.createElement('img', { key: image.id, src: image.image.thumb.url, style: { padding: 1 } });
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { key: this.props.id, style: { borderStyle: 'solid', backgroundColor: 'white', borderWidth: '1px', marginTop: '5px', padding: '3px' } },
+	        _react2.default.createElement(
+	          'div',
+	          { style: { display: 'flex', flexDirection: 'row', borderBottomStyle: 'solid', borderBottomWidth: '1px', paddingBottom: '4px', justifyContent: 'flex-start', alignItems: 'flex-start' } },
+	          _react2.default.createElement('img', { src: this.is_undefiend(this.props.url), style: { width: '50px', height: '50px' } }),
+	          _react2.default.createElement(
+	            'h5',
+	            { style: { paddingLeft: '5px', marginTop: '5px' } },
+	            'User: ',
+	            this.props.name
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' } },
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            this.props.text
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            images
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return NewsItem;
+	}(_react2.default.Component);
+
+	exports.default = NewsItem;
+
+/***/ },
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31721,7 +31947,7 @@
 	exports.default = Profile;
 
 /***/ },
-/* 313 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31850,7 +32076,7 @@
 	exports.default = Gallery;
 
 /***/ },
-/* 314 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31905,7 +32131,7 @@
 	          outcoming = _props$user.outcoming,
 	          friends = _props$user.friends;
 
-	      var friend_list = typeof friends == 'undefined' ? '' : friends.map(function (friend) {
+	      var friend_list = typeof friends == 'undefined' ? '' : friends.slice(0, 9).map(function (friend) {
 
 	        return _react2.default.createElement(
 	          'div',
@@ -31925,11 +32151,16 @@
 	      var incoming_list = typeof incoming == 'undefined' ? '' : incoming.map(function (friend) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { key: friend.id, style: { display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' } },
 	          _react2.default.createElement(
-	            'h5',
-	            null,
-	            friend.name
+	            _reactRouter.Link,
+	            { to: '/user/' + friend.id },
+	            _react2.default.createElement('img', { key: friend.id, src: friend.avatar.smaller.url, style: { width: 72, height: 72 } }),
+	            _react2.default.createElement(
+	              'h5',
+	              { style: { margin: '3px', textAlign: 'center' } },
+	              friend.name
+	            )
 	          ),
 	          _react2.default.createElement(
 	            'button',
@@ -31988,7 +32219,7 @@
 	exports.default = Friends;
 
 /***/ },
-/* 315 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32027,6 +32258,17 @@
 	  }
 
 	  _createClass(RelationshipRequest, [{
+	    key: 'SendInvite',
+	    value: function SendInvite() {
+	      this.props.createRelationships({ friend_id: this.props.user.id });
+	    }
+	  }, {
+	    key: 'DeleteFriend',
+	    value: function DeleteFriend() {
+	      this.props.deleteFriend({ id: this.props.current_user.id, friend_id: this.props.user.id });
+	      this.props.fetchCurrentUser();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props,
@@ -32049,22 +32291,31 @@
 	      }) : '';
 	      if (is_friends) {
 	        return _react2.default.createElement(
-	          'h3',
+	          'div',
 	          null,
-	          'User in yours friend list'
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'User in yours friend list'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.DeleteFriend.bind(this) },
+	            'Delete'
+	          )
 	        );
 	      }
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        outcoming_requests ? _react2.default.createElement(
-	          'h5',
+	          'h3',
 	          null,
-	          'You already send friend request to ',
+	          'You send friend request to ',
 	          user.name
 	        ) : _react2.default.createElement(
 	          'button',
-	          null,
+	          { onClick: this.SendInvite.bind(this) },
 	          'Add to friends'
 	        )
 	      );
@@ -32077,7 +32328,297 @@
 	exports.default = RelationshipRequest;
 
 /***/ },
-/* 316 */
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(182);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _reactDropzone = __webpack_require__(267);
+
+	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Settings = function (_React$Component) {
+	  _inherits(Settings, _React$Component);
+
+	  function Settings(props) {
+	    _classCallCheck(this, Settings);
+
+	    return _possibleConstructorReturn(this, (Settings.__proto__ || Object.getPrototypeOf(Settings)).call(this, props));
+	  }
+
+	  _createClass(Settings, [{
+	    key: 'updateSettings',
+	    value: function updateSettings() {
+	      var _this2 = this;
+
+	      var data = new FormData();
+	      data.append('user[avatar]', this.props.files[0]);
+	      data.append('user[email]', this.refs.email.value);
+	      data.append('user[name]', this.refs.name.value);
+	      _axios2.default.patch('/users/' + this.props.current_user.id, data).then(function (response) {
+	        _this2.props.router.push('user/' + response.data.id);
+	        _this2.props.fetchCurrentUser();
+	        _this2.props.updateFiles([]);
+	      });
+	    }
+	  }, {
+	    key: 'onDrop',
+	    value: function onDrop(files) {
+	      this.props.updateFiles(files.slice(0, 1));
+	    }
+	  }, {
+	    key: 'onOpenClick',
+	    value: function onOpenClick() {
+	      this.refs.dropzone.open();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      console.log('aaa', this.props);
+	      var _props = this.props,
+	          current_user = _props.current_user,
+	          files = _props.files;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { style: { display: 'flex', width: '770px', backgroundColor: 'grey', flexDirection: 'column', alignContent: 'space-around', justifyContent: 'space-around' } },
+	        _react2.default.createElement(
+	          'h3',
+	          { style: { textAlign: 'center' } },
+	          'Profile info'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'Name'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement('input', { type: 'text', ref: 'name', defaultValue: current_user.name })
+	          ),
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'Email'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement('input', { type: 'text', ref: 'email', defaultValue: current_user.email })
+	          ),
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'Avatar'
+	          ),
+	          _react2.default.createElement('img', { src: current_user.avatar.smaller.url }),
+	          _react2.default.createElement(
+	            _reactDropzone2.default,
+	            { ref: 'dropzone', style: { display: 'none' }, onDrop: this.onDrop.bind(this) },
+	            _react2.default.createElement(
+	              'div',
+	              { style: { height: 100 } },
+	              _react2.default.createElement(
+	                'h4',
+	                null,
+	                'Drop image here to upload '
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '  ',
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'button', onClick: this.onOpenClick.bind(this) },
+	              'Open file'
+	            )
+	          ),
+	          files.length > 0 ? _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	              'h4',
+	              null,
+	              'New avatar preview.'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              null,
+	              files.map(function (file) {
+	                return _react2.default.createElement('img', { src: file.preview, width: '50', height: '50' });
+	              })
+	            )
+	          ) : null,
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              'button',
+	              { id: 'create_news', onClick: this.updateSettings.bind(this) },
+	              'Save'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Settings;
+	}(_react2.default.Component);
+
+	exports.default = Settings;
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(182);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _reactRouter = __webpack_require__(183);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var FriendList = function (_React$Component) {
+	  _inherits(FriendList, _React$Component);
+
+	  function FriendList(props) {
+	    _classCallCheck(this, FriendList);
+
+	    var _this = _possibleConstructorReturn(this, (FriendList.__proto__ || Object.getPrototypeOf(FriendList)).call(this, props));
+
+	    _this.infiniteLoad = _this.infiniteLoad.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(FriendList, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.setCounter(25);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'LoadMore',
+	    value: function LoadMore() {
+	      this.props.setCounter(this.props.counter + 25);
+	    }
+	  }, {
+	    key: 'infiniteLoad',
+	    value: function infiniteLoad() {
+	      if (this.props.counter - this.props.current_user.friends.length >= 25) {
+	        return null;
+	      }
+	      var height = document.getElementsByTagName('body')[0].clientHeight - (window.innerHeight + window.pageYOffset);
+	      if (height < 40) {
+	        this.LoadMore();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var current_user = this.props.current_user;
+	      var friends = this.props.current_user.friends.slice(0, this.props.counter).map(function (friend) {
+	        return _react2.default.createElement(
+	          'div',
+	          { id: friend.id },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/user/' + friend.id },
+	            _react2.default.createElement(
+	              'div',
+	              { style: { display: 'flex', marginTop: '10px', paddingLeft: '20px', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-around' } },
+	              _react2.default.createElement('img', { key: friend.id, src: friend.avatar.small.url, style: { width: 85, height: 85 } }),
+	              _react2.default.createElement(
+	                'h3',
+	                { style: { margin: '3px', textAlign: 'center', paddingLeft: '10px' } },
+	                friend.name
+	              )
+	            )
+	          )
+	        );
+	      });
+	      var i = 1;
+	      console.log(friends.filter(function (friend) {}));
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          { style: { textAlign: 'center' } },
+	          'Friends'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { display: 'flex', width: '770px', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around' } },
+	          friends
+	        )
+	      );
+	    }
+	  }]);
+
+	  return FriendList;
+	}(_react2.default.Component);
+
+	exports.default = FriendList;
+
+/***/ },
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32088,11 +32629,11 @@
 
 	var _redux = __webpack_require__(275);
 
-	var _reduxThunk = __webpack_require__(317);
+	var _reduxThunk = __webpack_require__(321);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reducers = __webpack_require__(318);
+	var _reducers = __webpack_require__(322);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -32103,7 +32644,7 @@
 	exports.default = (0, _redux.createStore)(_reducers2.default, middleware);
 
 /***/ },
-/* 317 */
+/* 321 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32131,7 +32672,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 318 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32142,11 +32683,11 @@
 
 	var _redux = __webpack_require__(275);
 
-	var _currentUserReducer = __webpack_require__(319);
+	var _currentUserReducer = __webpack_require__(323);
 
 	var _currentUserReducer2 = _interopRequireDefault(_currentUserReducer);
 
-	var _userReducer = __webpack_require__(320);
+	var _userReducer = __webpack_require__(324);
 
 	var _userReducer2 = _interopRequireDefault(_userReducer);
 
@@ -32158,7 +32699,7 @@
 	});
 
 /***/ },
-/* 319 */
+/* 323 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32188,7 +32729,7 @@
 	}
 
 /***/ },
-/* 320 */
+/* 324 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32204,7 +32745,7 @@
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function reducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { user: [], text: '', files: [], news_files: [] };
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { user: [], text: '', files: [], news_files: [], counter: 0 };
 	  var action = arguments[1];
 
 	  switch (action.type) {
@@ -32270,6 +32811,16 @@
 	        return _extends({}, state, { user: _extends({}, state.user, { incoming: state.user.incoming.filter(function (friend) {
 	              return friend.id !== action.payload;
 	            }) }) });
+	        break;
+	      }
+	    case "SET_COUNTER":
+	      {
+	        return _extends({}, state, { counter: action.payload });
+	        break;
+	      }
+	    case "SET_PREV_PARAMS":
+	      {
+	        return _extends({}, state, { prevParams: action.payload });
 	        break;
 	      }
 	  }
