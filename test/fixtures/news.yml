@@ -2,5 +2,10 @@
 
 
 news1:
-  user: user11
+  text: "some text"
+  user: user1
   wall: wall1
+news2:
+  text: "and more"
+  user: user2
+  wall: wall2
