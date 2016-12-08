@@ -1,5 +1,7 @@
 class FriendsController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
+  before_filter :authenticate
+ 
   def create
     @user = User.find( params[:friend_id])
     if ((@user != current_user)&&(!current_user.friends.find_by(id: @user.id)))
