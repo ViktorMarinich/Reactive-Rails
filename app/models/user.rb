@@ -12,6 +12,10 @@ class User < ActiveRecord::Base
   mount_uploader :avatar, ImageUploader
   has_secure_password
 
+  def user_and_friends_ids
+    x= self.friend_ids
+    x << self.id
+  end
   private
   def create_wall
     Wall.create(user_id: self.id)
