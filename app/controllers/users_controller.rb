@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
+  before_filter :authenticate , only: [:update]
 
   def index
   end
@@ -17,20 +18,17 @@ class UsersController < ApplicationController
         sign_in(@user)
         render :json => @user.to_json
       else
-        render :json => { :errors => @user.errors }
+        render :json => @user.errors , status: 403
       end
     end
   end
+
   def update
     @user = User.find(params[:id])
-    respond_to do |format|
-      format.json do
-        if @user.update(user_params)
-          render :json => @user.to_json
-        else
-          render :json => { :errors => @user.errors.messages }
-        end
-      end
+    if @user.update(user_params)
+      render :json => @user.to_json
+    else
+      render :json => @user.errors , status: 403
     end
   end
 
