@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   get 'users/current' => 'users#current'
   get 'logout' => 'sessions#destroy'
   post 'friends/destroy' => 'friends#destroy'
-  resources :users, :defaults => { :format => 'json' }
+  resources :users, except: [:destroy], :defaults => { :format => 'json' }
   resources :sessions, only: [:create], :defaults => { :format => 'json' }
-  resources :news, only: [:create ],:defaults => { :format => 'json' }
+  resources :news, only: [:index,:create ],:defaults => { :format => 'json' }
   resources :images, only: [:create ],:defaults => { :format => 'json' }
   resources :relationships, only: [:create ],:defaults => { :format => 'json' }
   resources :friends, only: [:create],:defaults => { :format => 'json' }
