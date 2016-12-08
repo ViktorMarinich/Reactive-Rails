@@ -11,7 +11,7 @@ export default class Friends extends React.Component{
   render() {
     console.log('fruend props',this.props)
     const {incoming,outcoming, friends }=this.props.user
-    const friend_list = (typeof friends=='undefined')?'':friends.map((friend)=>{
+    const friend_list = (typeof friends=='undefined')?'':friends.slice(0,9).map((friend)=>{
 
       return (
         <div style={{display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start',alignItems: 'flex-start'}} >
