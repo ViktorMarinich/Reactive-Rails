@@ -31368,6 +31368,7 @@
 	exports.deleteIncoming = deleteIncoming;
 	exports.setCounter = setCounter;
 	exports.setPrevParams = setPrevParams;
+	exports.updatingGalleryStart = updatingGalleryStart;
 
 	var _axios = __webpack_require__(241);
 
@@ -31385,20 +31386,15 @@
 	function updateUser(id, params) {
 	  return function (dispatch) {
 	    _axios2.default.patch("/users/" + id, params).then(function (response) {
-	      console.log('user-res', response.data);
 	      dispatch({ type: "UPDATE_USER", payload: response.data });
-	    }).catch(function (response) {
-	      console.log('error', response);
 	    });
 	  };
 	}
 	function updateNews(params) {
 	  return function (dispatch) {
+	    dispatch({ type: "UPDATING_NEWS_START" });
 	    _axios2.default.post('/news', params).then(function (response) {
-	      console.log('response-news', response.data);
 	      dispatch({ type: "UPDATE_NEWS", payload: response.data });
-	    }).catch(function (response) {
-	      console.log('error', response);
 	    });
 	  };
 	}
@@ -31451,7 +31447,6 @@
 	function addFriend(params) {
 	  return function (dispatch) {
 	    _axios2.default.post('/friends', params).then(function (response) {
-	      console.log(response.data);
 	      dispatch({ type: "ADD_FRIEND", payload: response.data });
 	    });
 	  };
@@ -31472,6 +31467,11 @@
 	  return {
 	    type: 'SET_PREV_PARAMS',
 	    payload: value
+	  };
+	}
+	function updatingGalleryStart() {
+	  return {
+	    type: 'UPDATING_GALLERY_START'
 	  };
 	}
 
@@ -31535,10 +31535,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var style = {
-	  menuItem: { width: '300px', display: 'inline-block' }
-	};
-
 	var User = function (_Component) {
 	  _inherits(User, _Component);
 
@@ -31569,11 +31565,14 @@
 	          user = _props.user,
 	          current_user = _props.current_user,
 	          files = _props.files,
+	          updating_news = _props.updating_news,
+	          updating_gallery = _props.updating_gallery,
 	          counter = _props.counter,
 	          prevParams = _props.prevParams,
 	          text = _props.text,
 	          news_files = _props.news_files;
 
+	      var style = { menuItem: { width: '300px', display: 'inline-block' } };
 	      if (typeof user.friends == 'undefined') {
 	        return _react2.default.createElement(
 	          'div',
@@ -31593,6 +31592,7 @@
 	          updateNewsText = _props$userActions.updateNewsText,
 	          fetchUser = _props$userActions.fetchUser,
 	          setCounter = _props$userActions.setCounter,
+	          updatingGalleryStart = _props$userActions.updatingGalleryStart,
 	          updateNews = _props$userActions.updateNews;
 	      var fetchCurrentUser = this.props.currentUserActions.fetchCurrentUser;
 
@@ -31603,19 +31603,17 @@
 	          'div',
 	          { style: { width: '400px' } },
 	          _react2.default.createElement(_Profile2.default, { user: user }),
-	          current_user.id != user.id ? _react2.default.createElement(_RelationshipRequest2.default, { fetchCurrentUser: fetchCurrentUser,
-	            createRelationships: createRelationships, deleteFriend: deleteFriend, user: user,
-	            current_user: current_user }) : '',
+	          current_user.id != user.id ? _react2.default.createElement(_RelationshipRequest2.default, { fetchCurrentUser: fetchCurrentUser, createRelationships: createRelationships,
+	            deleteFriend: deleteFriend, user: user, current_user: current_user }) : '',
 	          _react2.default.createElement(_Friends2.default, { user: user, current_user: current_user, fetchUser: fetchUser, addFriend: addFriend, deleteIncoming: deleteIncoming })
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { style: { width: '400px' } },
-	          _react2.default.createElement(_Gallery2.default, { user: user, current_user: current_user, files: files, updateFiles: updateFiles, updateGallery: updateGallery }),
-	          _react2.default.createElement(_News2.default, { user: user, counter: counter, prevParams: prevParams, setPrevParams: setPrevParams,
-	            setCounter: setCounter, updateNews: updateNews,
-	            text: text, updateNewsText: updateNewsText,
-	            news_files: news_files, updateNewsFiles: updateNewsFiles })
+	          _react2.default.createElement(_Gallery2.default, { user: user, current_user: current_user, files: files, updateFiles: updateFiles,
+	            updatingGalleryStart: updatingGalleryStart, updating_gallery: updating_gallery, updateGallery: updateGallery }),
+	          _react2.default.createElement(_News2.default, { updating_news: updating_news, user: user, counter: counter, prevParams: prevParams, setPrevParams: setPrevParams,
+	            setCounter: setCounter, updateNews: updateNews, text: text, updateNewsText: updateNewsText, news_files: news_files, updateNewsFiles: updateNewsFiles })
 	        )
 	      );
 	    }
@@ -31629,6 +31627,8 @@
 	    user: state.user.user,
 	    text: state.user.text,
 	    files: state.user.files,
+	    updating_news: state.user.updating_news,
+	    updating_gallery: state.user.updating_gallery,
 	    counter: state.user.counter,
 	    prevParams: state.user.prevParams,
 	    news_files: state.user.news_files,
@@ -31698,6 +31698,7 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = News.__proto__ || Object.getPrototypeOf(News)).call.apply(_ref, [this].concat(args))), _this), _this.changeContent = function (e) {
 	      _this.props.updateNewsText(e.target.value);
 	      var url = e.target.value;
+
 	      if (url != undefined || url != '') {
 	        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
 	        var match = url.match(regExp);
@@ -31709,6 +31710,11 @@
 	          _this.refs.video.style.display = 'none';
 	          _this.refs.video.src = '';
 	        }
+	      }
+	      if (e.target.value.length > 200) {
+	        _this.refs.length.style.color = 'black';
+	      } else {
+	        _this.refs.length.style.color = '#f4a442';
 	      }
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
@@ -31763,7 +31769,18 @@
 	        _react2.default.createElement(
 	          'div',
 	          { style: { borderStyle: 'double', textAlign: 'center', backgroundColor: '#823737', paddingTop: '10px', paddingBottom: '10px' } },
-	          _react2.default.createElement('textarea', { value: this.props.text, id: 'news', ref: 'comment', onChange: this.changeContent, type: 'text', placeholder: 'Type yours comment', cols: '40', rows: '3' }),
+	          _react2.default.createElement('textarea', { value: this.props.text, id: 'news', ref: 'comment', onChange: this.changeContent, type: 'text', placeholder: 'Type yours comment', cols: '40', rows: '6' }),
+	          _react2.default.createElement(
+	            'p',
+	            { style: { textAlign: 'right', paddingRight: '40px', fontStyle: 'bold', color: '#f4a442' } },
+	            this.props.text.length == 0 ? null : _react2.default.createElement(
+	              'span',
+	              { ref: 'length' },
+	              ' ',
+	              this.props.text.length,
+	              ' '
+	            )
+	          ),
 	          _react2.default.createElement(
 	            'div',
 	            null,
@@ -31808,13 +31825,13 @@
 	              null,
 	              _react2.default.createElement(
 	                'button',
-	                { id: 'create_news', onClick: this.createNews.bind(this) },
+	                { disabled: this.props.text.length > 200, id: 'create_news', onClick: this.createNews.bind(this) },
 	                'Send'
 	              )
 	            ) : null
 	          ),
 	          _react2.default.createElement('iframe', { ref: 'video', id: 'videoObject', style: { display: 'none' }, type: 'text/html', width: '300', height: '300', frameBorder: '0', allowFullScreen: true }),
-	          _react2.default.createElement(_NewsList2.default, { user: this.props.user, prevParams: this.props.prevParams, setPrevParams: this.props.setPrevParams, counter: this.props.counter, setCounter: this.props.setCounter })
+	          _react2.default.createElement(_NewsList2.default, { updating_news: this.props.updating_news, user: this.props.user, prevParams: this.props.prevParams, setPrevParams: this.props.setPrevParams, counter: this.props.counter, setCounter: this.props.setCounter })
 	        )
 	      );
 	    }
@@ -31915,7 +31932,6 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      console.log(this.props.counter);
 	      var current_user = this.props.current_user;
 	      var revert = 0 - this.props.counter;
 	      var news = this.props.user.wall.news.slice(revert).sort(function (a, b) {
@@ -31933,6 +31949,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { style: { padding: '10px' } },
+	        !this.props.updating_news ? null : _react2.default.createElement('img', { src: 'images/loading/loading.gif', style: { height: '50px', width: '50px' } }),
 	        news
 	      );
 	    }
@@ -32023,15 +32040,15 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { style: { display: 'flex', minWidth: '300px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' } },
+	          { style: { minWidth: '300px', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'flex-start' } },
 	          _react2.default.createElement(
 	            'h3',
-	            null,
+	            { style: { wordBreak: 'break-all', paddingLeft: '5px', textAlign: 'justify' } },
 	            this.props.text
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            null,
+	            { style: { minWidth: '300px', flexWrap: 'wrap', alignContent: 'stretch' } },
 	            images
 	          ),
 	          video
@@ -32092,7 +32109,6 @@
 	          id = _props$user.id,
 	          avatar = _props$user.avatar;
 
-	      console.log(this.props);
 	      if (typeof avatar == 'undefined') {
 	        return _react2.default.createElement(
 	          'div',
@@ -32183,6 +32199,7 @@
 	      this.props.files.map(function (file) {
 	        data.append('image[' + file.name + ']', file);
 	      });
+	      this.props.updatingGalleryStart();
 	      _axios2.default.post('/images', data).then(function (response) {
 	        _this2.props.updateGallery(response.data);
 	        _this2.props.updateFiles([]);
@@ -32257,7 +32274,12 @@
 	            { style: { margin: '5px' }, onClick: this.uploadImages.bind(this) },
 	            'Upload files'
 	          )
-	        ) : null
+	        ) : null,
+	        !this.props.updating_gallery ? null : _react2.default.createElement(
+	          'div',
+	          { style: { paddingLeft: '180px' } },
+	          _react2.default.createElement('img', { src: 'images/loading/loading.gif', style: { height: '50px', width: '50px' } })
+	        )
 	      );
 	    }
 	  }]);
@@ -32620,7 +32642,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log('aaa', this.props);
 	      var _props = this.props,
 	          current_user = _props.current_user,
 	          files = _props.files;
@@ -32929,7 +32950,7 @@
 	        }
 	        return 0;
 	      }).map(function (image) {
-	        return _react2.default.createElement('img', { key: image.id, src: image.image.url, style: { width: '700px' } });
+	        return _react2.default.createElement('img', { key: image.id, src: image.image.url, style: { width: '700px', marginTop: '20px' } });
 	      });
 	      return _react2.default.createElement(
 	        'div',
@@ -33215,7 +33236,7 @@
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function reducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { user: [], text: '', files: [], news_files: [], counter: 0 };
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { user: [], text: '', files: [], news_files: [], counter: 0, updating_gallery: false, updating_news: false };
 	  var action = arguments[1];
 
 	  switch (action.type) {
@@ -33231,7 +33252,7 @@
 	      }
 	    case "UPDATE_NEWS":
 	      {
-	        return _extends({}, state, { user: _extends({}, state.user, { wall: _extends({}, state.user.wall, { news: [].concat(_toConsumableArray(state.user.wall.news), [action.payload]) }) }) });
+	        return _extends({}, state, { updating_news: false, user: _extends({}, state.user, { wall: _extends({}, state.user.wall, { news: [].concat(_toConsumableArray(state.user.wall.news), [action.payload]) }) }) });
 	        break;
 	      }
 	    case "UPDATE_NEWS_TEXT":
@@ -33246,7 +33267,7 @@
 	      }
 	    case "UPDATE_GALLERY":
 	      {
-	        return _extends({}, state, { user: _extends({}, state.user, { gallery: _extends({}, state.user.gallery, { images: state.user.gallery.images.concat(action.payload) }) }) });
+	        return _extends({}, state, { updating_gallery: false, user: _extends({}, state.user, { gallery: _extends({}, state.user.gallery, { images: state.user.gallery.images.concat(action.payload) }) }) });
 	        break;
 	      }
 	    case "UPDATE_NEWS_FILES":
@@ -33291,6 +33312,16 @@
 	    case "SET_PREV_PARAMS":
 	      {
 	        return _extends({}, state, { prevParams: action.payload });
+	        break;
+	      }
+	    case "UPDATING_NEWS_START":
+	      {
+	        return _extends({}, state, { updating_news: true });
+	        break;
+	      }
+	    case "UPDATING_GALLERY_START":
+	      {
+	        return _extends({}, state, { updating_gallery: true });
 	        break;
 	      }
 	  }
