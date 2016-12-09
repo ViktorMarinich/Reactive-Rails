@@ -24,3 +24,9 @@ export function fetchNews() {
       })
   }
 }
+export function setErrors(value) {
+  return {
+    type: 'SET_ERRORS',
+    payload: value,
+  }
+}
