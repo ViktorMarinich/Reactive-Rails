@@ -25,25 +25,31 @@ class User extends Component{
     }
   }
   render() {
+    const {user, current_user, files, counter, prevParams,text,news_files}=this.props
+    const {addFriend,updateFiles, updateGallery,setPrevParams,deleteIncoming,deleteFriend,
+      createRelationships,updateNewsFiles, updateNewsText, setCounter, updateNews}=this.props.userActions
+    const {fetchCurrentUser}=this.props.currentUserActions
     return (
       <div style={{display: 'flex', width: '770px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
         <div style={style.menuItem}>
-          <Profile user={this.props.user}/>
-          {(this.props.current_user.id!=this.props.user.id)? <RelationshipRequest  fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser} createRelationships={this.props.userActions.createRelationships} deleteFriend={this.props.userActions.deleteFriend} user={this.props.user}  current_user={this.props.current_user}/> :''}
-          <Friends user={this.props.user} current_user={this.props.current_user} addFriend={this.props.userActions.addFriend} deleteIncoming={this.props.userActions.deleteIncoming}/>
+          <Profile user={user}/>
+          {(current_user.id!=user.id)? <RelationshipRequest  fetchCurrentUser={fetchCurrentUser}
+           createRelationships={createRelationships} deleteFriend={deleteFriend} user={user}
+           current_user={current_user}/> :''}
+          <Friends user={user} current_user={current_user} addFriend={addFriend} deleteIncoming={deleteIncoming}/>
         </div>
-
         <div style={style.menuItem}>
-          <Gallery user={this.props.user} files={this.props.files} updateFiles={this.props.userActions.updateFiles}
-           updateGallery={this.props.userActions.updateGallery}/>
-         <News user={this.props.user} counter={this.props.counter} prevParams={this.props.prevParams} setPrevParams={this.props.userActions.setPrevParams} setCounter={this.props.userActions.setCounter} updateNews={this.props.userActions.updateNews}
-          text={this.props.text} updateNewsText={this.props.userActions.updateNewsText}
-          news_files={this.props.news_files} updateNewsFiles={this.props.userActions.updateNewsFiles}/>
+          <Gallery user={user} files={files} updateFiles={updateFiles} updateGallery={updateGallery}/>
+          <News user={user} counter={counter} prevParams={prevParams} setPrevParams={setPrevParams}
+            setCounter={setCounter} updateNews={updateNews}
+          text={text} updateNewsText={updateNewsText}
+          news_files={news_files} updateNewsFiles={updateNewsFiles}/>
         </div>
       </div>
     );
   }
 }
+
 function mapStateToProps(state) {
   return {
     user: state.user.user,
@@ -60,7 +66,6 @@ function mapDispatchToProps(dispatch) {
   return {
     userActions: bindActionCreators(userActions, dispatch),
     currentUserActions: bindActionCreators(currentUserActions, dispatch)
-
   }
 }
 
