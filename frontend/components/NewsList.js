@@ -44,8 +44,7 @@ export default class  NewsList  extends React.Component{
               name={news.user.name} url={news.user.avatar.url} text={news.text}  />
      })
     return (
-        <div>
-          <h3>News</h3>
+      <div style={{padding: '10px'}}>
           {news}
         </div>
       )
