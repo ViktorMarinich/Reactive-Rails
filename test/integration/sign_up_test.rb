@@ -11,11 +11,14 @@ class UsersTest < ActionDispatch::IntegrationTest
   end
 
   def test_create_new_user
-    page.fill_in "name_field", :with => "name uniq"
-    page.fill_in "email_field", :with => "theusewr@a.net"
-    page.fill_in "password_field", :with => "password"
-    page.fill_in "password_confirmation_field", :with => "password"
-    page.find('button[id="sign_up"]').click
+    assert_difference 'User.count', 1 do
+      page.fill_in "name_field", :with => "name uniq"
+      page.fill_in "email_field", :with => "theusewr@a.net"
+      page.fill_in "password_field", :with => "password"
+      page.fill_in "password_confirmation_field", :with => "password"
+      page.find('button[id="sign_up"]').click
+      sleep 1
+    end
     assert page.has_content?("name uniq")
     click_on "Sign Out"
   end
