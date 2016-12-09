@@ -20,11 +20,15 @@ class User < ActiveRecord::Base
   end
   private
   def create_wall
-    Wall.create(user_id: self.id)
+    unless self.wall
+      Wall.create(user_id: self.id)
+    end
   end
 
   def create_gallery
-    Gallery.create(user_id: self.id)
+    unless self.gallery
+      Gallery.create(user_id: self.id)
+    end
   end
 
   def self.bcrypt_string(string,cost=1)
