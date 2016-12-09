@@ -8,6 +8,7 @@ export default class GalleryPage extends React.Component{
     this.infiniteLoad = this.infiniteLoad.bind(this)
   }
   componentWillMount(){
+    this.props.fetchCurrentUser()
       this.props.setCounter(3)
     }
   componentDidMount(){
