@@ -17,6 +17,7 @@ class NewsController < ApplicationController
         Gallery.create(news: @news)
         params[:image].each do |k,v|
           @image = @news.gallery.images.create(image: v)
+          current_user.gallery.images.create(image: v)
         end
       end
       current_user.news << @news
