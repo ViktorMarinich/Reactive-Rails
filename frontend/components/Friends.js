@@ -29,7 +29,7 @@ export default class Friends extends React.Component{
           <img  src={friend.avatar.smaller.url} style={{width: 72, height: 72}} ></img>
           <h5 style={{ margin: '3px', textAlign: 'center'}}>{friend.name}</h5>
           </Link>
-          <button onClick={this.AddFriend.bind(this,friend)}>Accept</button>
+          <button style={{ textAlign: 'center' ,marginBottom: '10px',marginLeft: '10px'}} onClick={this.AddFriend.bind(this,friend)}>Accept</button>
         </div>)
     })
     const outcoming_list = (typeof outcoming=='undefined')?'':outcoming.map(function(friend){
@@ -44,7 +44,8 @@ export default class Friends extends React.Component{
     })
     return (
       <div>
-        <h3 style={{textAlign: 'center'}}>Friends</h3>
+        <h3 style={{textAlign: 'center', marginBottom: '5px'}}>Friends</h3>
+        <h5 style={{ textAlign: 'center', marginTop: '5px'}}>({user.name} have {(typeof user.friends.length!= 'undefined')? user.friends.length: null} friends)</h5>
         <div style={{   display: 'flex',borderStyle: 'double', backgroundColor:'#596768',paddingTop: '20px', paddignBot: '20px', flexWrap: 'wrap',  alignContent: 'stretch', justifyContent: 'flex-start'}}>
           {friend_list}
         </div>
