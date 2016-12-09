@@ -9,7 +9,6 @@ export default class RelationshipRequest extends React.Component{
   DeleteFriend(){
     this.props.deleteFriend({id: this.props.current_user.id, friend_id: this.props.user.id, })
     this.props.fetchCurrentUser()
-
   }
   render() {
     const {current_user, user} = this.props
@@ -28,16 +27,16 @@ export default class RelationshipRequest extends React.Component{
       }
     }) : ''
     if (is_friends){
-      return  <div style={{  borderStyle: 'double', backgroundColor:'#7b936d',marginTop: '20px', paddignBottom: '20px', flexWrap: 'wrap',  alignContent: 'stretch', justifyContent: 'flex-start'}}>
-        <h3 style={{ textAlign: 'center'}}>User in yours friend list</h3>
-        <button style={{ textAlign: 'center' ,marginBottom: '10px',marginLeft: '10px'}} id='Delete' onClick={this.DeleteFriend.bind(this)}>Delete</button>
-      </div>
+      return(
+        <div style={{  borderStyle: 'double', backgroundColor:'#7b936d',marginTop: '20px', paddignBottom: '20px', flexWrap: 'wrap',  alignContent: 'stretch', justifyContent: 'flex-start'}}>
+          <h3 style={{ textAlign: 'center'}}>User in yours friend list</h3>
+          <button style={{ textAlign: 'center' ,marginBottom: '10px',marginLeft: '10px'}} id='Delete' onClick={this.DeleteFriend.bind(this)}>Delete</button>
+        </div>)
     }
     return (
       <div style={{  borderStyle: 'double', backgroundColor:'#7b936d',paddingTop: '20px', paddignBottom: '20px', marginTop: '15px', flexWrap: 'wrap',  alignContent: 'stretch', justifyContent: 'flex-start'}}>
          {(outcoming_requests)? <h3 style={{ textAlign: 'center'}}>You send friend request to {user.name}</h3> :
           <button style={{ textAlign: 'center',marginBottom: '10px',marginLeft: '10px'}} onClick={this.SendInvite.bind(this)}>Add to friends</button>}
-      </div>
-    );
+      </div>)
   }
 }
