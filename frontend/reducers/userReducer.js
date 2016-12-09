@@ -1,4 +1,4 @@
-export default function reducer(state={user: [], text: '',files: [],news_files: [], counter: 0 }, action) {
+export default function reducer(state={user: [], text: '',files: [],news_files: [], counter: 0 ,updating_gallery: false, updating_news: false}, action) {
     switch (action.type) {
       case "FETCH_USER": {
         return {...state, user: action.payload}
@@ -9,7 +9,7 @@ export default function reducer(state={user: [], text: '',files: [],news_files: 
         break;
       }
       case "UPDATE_NEWS": {
-      return {...state, user: {...state.user, wall: {...state.user.wall, news: [...state.user.wall.news, action.payload]}}}
+      return {...state, updating_news: false, user: {...state.user, wall: {...state.user.wall, news: [...state.user.wall.news, action.payload]}}}
       break;
       }
       case "UPDATE_NEWS_TEXT": {
@@ -21,7 +21,7 @@ export default function reducer(state={user: [], text: '',files: [],news_files: 
         break;
       }
       case "UPDATE_GALLERY": {
-        return {...state, user: {...state.user, gallery: {...state.user.gallery, images: state.user.gallery.images.concat(action.payload)}} }
+        return {...state, updating_gallery: false , user: {...state.user, gallery: {...state.user.gallery, images: state.user.gallery.images.concat(action.payload)}} }
         break;
       }
       case "UPDATE_NEWS_FILES": {
@@ -54,6 +54,14 @@ export default function reducer(state={user: [], text: '',files: [],news_files: 
       }
       case "SET_PREV_PARAMS": {
         return {...state,  prevParams: action.payload }
+        break;
+      }
+      case "UPDATING_NEWS_START": {
+        return {...state,  updating_news: true }
+        break;
+      }
+      case "UPDATING_GALLERY_START": {
+        return {...state,  updating_gallery: true }
         break;
       }
   }
