@@ -72,9 +72,17 @@
 
 	var _FriendList2 = _interopRequireDefault(_FriendList);
 
+	var _GalleryPage = __webpack_require__(320);
+
+	var _GalleryPage2 = _interopRequireDefault(_GalleryPage);
+
+	var _AllNews = __webpack_require__(321);
+
+	var _AllNews2 = _interopRequireDefault(_AllNews);
+
 	var _reactRedux = __webpack_require__(268);
 
-	var _store = __webpack_require__(320);
+	var _store = __webpack_require__(322);
 
 	var _store2 = _interopRequireDefault(_store);
 
@@ -92,7 +100,9 @@
 	        _reactRouter.Route,
 	        { path: '/', component: _app2.default },
 	        _react2.default.createElement(_reactRouter.Route, { path: '/settings', component: _Settings2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/gallery', component: _GalleryPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/friends', component: _FriendList2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/news', component: _AllNews2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/user/:userId', component: _User2.default })
 	      )
 	    )
@@ -26822,10 +26832,6 @@
 
 	var _reactRouter = __webpack_require__(183);
 
-	var _axios = __webpack_require__(241);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -26855,76 +26861,155 @@
 	    value: function SignOut(e) {
 	      e.preventDefault();
 	      this.props.currentUserActions.destroySession();
+	      this.props.router.push('/');
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var children = this.props.children;
+	      var _props = this.props,
+	          children = _props.children,
+	          errors = _props.errors,
+	          current_user = _props.current_user,
+	          files = _props.files,
+	          router = _props.router,
+	          counter = _props.counter,
+	          allNews = _props.allNews;
+	      var _props$currentUserAct = this.props.currentUserActions,
+	          fetchNews = _props$currentUserAct.fetchNews,
+	          fetchCurrentUser = _props$currentUserAct.fetchCurrentUser,
+	          setErrors = _props$currentUserAct.setErrors;
+	      var _props$userActions = this.props.userActions,
+	          updateFiles = _props$userActions.updateFiles,
+	          setCounter = _props$userActions.setCounter;
 
-
-	      if (typeof this.props.current_user == 'undefined') {
+	      var i = 0;
+	      var error_list = typeof errors.length != 'undefined' ? errors.map(function (error) {
+	        i = i + 1;
+	        return _react2.default.createElement(
+	          'h4',
+	          { key: i, style: { color: 'red', textAlign: 'left', paddingLeft: '20px' } },
+	          error
+	        );
+	      }) : '';
+	      if (typeof current_user == 'undefined') {
 	        return _react2.default.createElement(
 	          'div',
 	          null,
 	          'Loading...'
 	        );
 	      }
-	      if (this.props.current_user == null) {
+	      if (current_user == null) {
 	        return _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_SignIn2.default, { router: this.props.router, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser }),
-	          _react2.default.createElement(_SignUp2.default, { router: this.props.router, files: this.props.files, updateFiles: this.props.userActions.updateFiles, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser })
+	          error_list == '' ? '' : _react2.default.createElement(
+	            'div',
+	            { style: { textAlign: 'center' } },
+	            _react2.default.createElement(
+	              'div',
+	              { style: { width: '400px', display: 'inline-block' } },
+	              _react2.default.createElement(
+	                'h3',
+	                { style: { textAlign: 'left', color: 'red' } },
+	                ' Something went wrong:'
+	              ),
+	              error_list
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { display: 'flex', width: '1000px', flexDirection: 'row', justifyContent: 'space-around' } },
+	            _react2.default.createElement(
+	              'div',
+	              { style: { width: '200px', display: 'inline-block' } },
+	              _react2.default.createElement(_SignIn2.default, { router: router, setErrors: setErrors, fetchCurrentUser: fetchCurrentUser })
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { style: { width: '200px', display: 'inline-block' } },
+	              _react2.default.createElement(_SignUp2.default, { router: router, setErrors: setErrors, files: files,
+	                updateFiles: updateFiles, fetchCurrentUser: fetchCurrentUser })
+	            )
+	          )
 	        );
 	      }
 	      return _react2.default.createElement(
 	        'div',
-	        { style: { display: 'flex', width: '1000px', backgroundColor: 'grey', flexDirection: 'row', justifyContent: 'space-around' } },
+	        { style: { display: 'flex', width: '1000px', flexDirection: 'row' } },
 	        _react2.default.createElement(
 	          'div',
-	          { style: { width: '200px', display: 'inline-block' } },
+	          null,
 	          _react2.default.createElement(
-	            'p',
-	            null,
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '/user/' + this.props.current_user.id },
-	              'My profile'
-	            )
+	            'h3',
+	            { style: { textAlign: 'center' } },
+	            'Menu'
 	          ),
 	          _react2.default.createElement(
-	            'p',
-	            null,
+	            'div',
+	            { style: { width: '200px', borderStyle: 'double', textAlign: 'center', backgroundColor: '#4a6877', paddingTop: '10px', paddingBottom: '10px' } },
 	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '/settings' },
-	              'Settings'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
+	              'p',
+	              null,
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/user/' + current_user.id },
+	                'My profile'
+	              )
+	            ),
 	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '/friends' },
-	              'Friends'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
+	              'p',
+	              null,
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/settings' },
+	                'Settings'
+	              )
+	            ),
 	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '/', onClick: this.SignOut.bind(this) },
-	              'Sign Out'
+	              'p',
+	              null,
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/friends' },
+	                'Friends'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/gallery' },
+	                'Gallery'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/news' },
+	                'News'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/', onClick: this.SignOut.bind(this) },
+	                'Sign Out'
+	              )
 	            )
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          null,
-	          this.props.children && _react2.default.cloneElement(this.props.children, { current_user: this.props.current_user, files: this.props.files, router: this.props.router, counter: this.props.counter,
-	            updateFiles: this.props.userActions.updateFiles, setCounter: this.props.userActions.setCounter, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser })
+	          { style: { paddingLeft: '10px' } },
+	          children && _react2.default.cloneElement(children, { current_user: current_user,
+	            files: files, router: router, counter: counter, updateFiles: updateFiles,
+	            allNews: allNews, fetchNews: fetchNews, setCounter: setCounter,
+	            fetchCurrentUser: fetchCurrentUser })
 	        )
 	      );
 	    }
@@ -26936,8 +27021,10 @@
 	function mapStateToProps(state) {
 	  return {
 	    current_user: state.currentUser.currentUser,
+	    allNews: state.currentUser.allNews,
 	    files: state.user.files,
-	    counter: state.user.counter
+	    counter: state.user.counter,
+	    errors: state.currentUser.errors
 	  };
 	}
 
@@ -26995,8 +27082,13 @@
 	      var email = this.refs.email.value;
 	      var password = this.refs.password.value;
 	      _axios2.default.post('/sessions', { session: { email: email, password: password } }).then(function (response) {
-	        _this2.props.fetchCurrentUser();
-	        _this2.props.router.push('user/' + response.data.id);
+	        if (response.data == null) {
+	          _this2.props.setErrors(['-Invalid email / password combination']);
+	        } else {
+	          _this2.props.fetchCurrentUser();
+	          _this2.props.router.push('user/' + response.data.id);
+	          _this2.props.setErrors([]);
+	        }
 	      });
 	    }
 	  }, {
@@ -28585,17 +28677,25 @@
 	      data.append('user[name]', this.refs.name.value);
 	      data.append('user[password]', this.refs.password.value);
 	      data.append('user[password_confirmation]', this.refs.password_confirmation.value);
-	      _axios2.default.post('/users', data).then(function (response) {
-	        _this2.props.fetchCurrentUser();
-	        _this2.props.router.push('user/' + response.data.id);
+	      _axios2.default.post('/users', data).then(function (resp) {
+	        if (typeof resp.data.password == 'undefined') {
+	          _this2.props.setErrors([]);
+	          _this2.props.fetchCurrentUser();
+	          _this2.props.router.push('user/' + resp.data.id);
+	          _this2.props.updateFiles([]);
+	        } else {
+	          var error = [];
+	          for (var key in resp.data) {
+	            error.push('-' + key + ': ' + resp.data[key].join(', '));
+	          }
+	          _this2.props.setErrors(error);
+	        }
 	      });
 	    }
 	  }, {
 	    key: 'onDrop',
 	    value: function onDrop(files) {
 	      this.props.updateFiles(files.slice(0, 1));
-	      console.log(files.slice(0, 1));
-	      console.log(this.props.files);
 	    }
 	  }, {
 	    key: 'onOpenClick',
@@ -28609,7 +28709,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { style: { marginBottom: '30px' } },
 	        _react2.default.createElement(
 	          'h1',
 	          { className: 'align-center' },
@@ -28636,11 +28736,16 @@
 	          _react2.default.createElement('input', { size: '30', ref: 'email', type: 'text', id: 'email_field' })
 	        ),
 	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Avatar'
+	        ),
+	        _react2.default.createElement(
 	          _reactDropzone2.default,
-	          { ref: 'dropzone', onDrop: this.onDrop.bind(this) },
+	          { ref: 'dropzone', style: { height: '80px', borderColor: '#afafaf', padding: '10px', width: '200px', borderStyle: 'double', margin: '10px' }, onDrop: this.onDrop.bind(this) },
 	          _react2.default.createElement(
 	            'div',
-	            { style: { height: 100 } },
+	            null,
 	            _react2.default.createElement(
 	              'h4',
 	              null,
@@ -28651,17 +28756,15 @@
 	        _react2.default.createElement(
 	          'button',
 	          { type: 'button', onClick: this.onOpenClick.bind(this) },
-	          'Open file'
+	          'Open file '
 	        ),
-	        files.length > 0 ? _react2.default.createElement(
+	        files.length <= 0 ? null : _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement(
 	            'h4',
-	            null,
-	            'You add ',
-	            files.length,
-	            ' images.'
+	            { style: { margin: '5px' } },
+	            'Avatar preview'
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -28670,7 +28773,7 @@
 	              return _react2.default.createElement('img', { src: file.preview, width: '50', height: '50' });
 	            })
 	          )
-	        ) : null,
+	        ),
 	        _react2.default.createElement(
 	          'p',
 	          null,
@@ -31205,6 +31308,8 @@
 	});
 	exports.fetchCurrentUser = fetchCurrentUser;
 	exports.destroySession = destroySession;
+	exports.fetchNews = fetchNews;
+	exports.setErrors = setErrors;
 
 	var _axios = __webpack_require__(241);
 
@@ -31215,7 +31320,6 @@
 	function fetchCurrentUser() {
 	  return function (dispatch) {
 	    _axios2.default.get("/users/current").then(function (response) {
-	      console.log('resp', response.data);
 	      dispatch({ type: "FETCH_CURRENT_USER", payload: response.data });
 	    });
 	  };
@@ -31225,6 +31329,19 @@
 	    _axios2.default.get("/logout").then(function (response) {
 	      dispatch({ type: "DESTROY_SESSION", payload: null });
 	    });
+	  };
+	}
+	function fetchNews() {
+	  return function (dispatch) {
+	    _axios2.default.get("/news").then(function (response) {
+	      dispatch({ type: "FETCH_NEWS", payload: response.data });
+	    });
+	  };
+	}
+	function setErrors(value) {
+	  return {
+	    type: 'SET_ERRORS',
+	    payload: value
 	  };
 	}
 
@@ -31441,30 +31558,64 @@
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.params != this.props.params) {
 	        this.props.userActions.fetchUser(nextProps.params.userId);
+	        this.props.currentUserActions.fetchCurrentUser();
 	        this.props.userActions.updateNewsText('');
 	      }
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _props = this.props,
+	          user = _props.user,
+	          current_user = _props.current_user,
+	          files = _props.files,
+	          counter = _props.counter,
+	          prevParams = _props.prevParams,
+	          text = _props.text,
+	          news_files = _props.news_files;
+
+	      if (typeof user.friends == 'undefined') {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          'Loading ...'
+	        );
+	      }
+	      var _props$userActions = this.props.userActions,
+	          addFriend = _props$userActions.addFriend,
+	          updateFiles = _props$userActions.updateFiles,
+	          updateGallery = _props$userActions.updateGallery,
+	          setPrevParams = _props$userActions.setPrevParams,
+	          deleteIncoming = _props$userActions.deleteIncoming,
+	          deleteFriend = _props$userActions.deleteFriend,
+	          createRelationships = _props$userActions.createRelationships,
+	          updateNewsFiles = _props$userActions.updateNewsFiles,
+	          updateNewsText = _props$userActions.updateNewsText,
+	          fetchUser = _props$userActions.fetchUser,
+	          setCounter = _props$userActions.setCounter,
+	          updateNews = _props$userActions.updateNews;
+	      var fetchCurrentUser = this.props.currentUserActions.fetchCurrentUser;
+
 	      return _react2.default.createElement(
 	        'div',
-	        { style: { display: 'flex', width: '770px', backgroundColor: 'grey', flexDirection: 'row', justifyContent: 'space-around' } },
+	        { style: { display: 'flex', width: '870px', flexDirection: 'row', justifyContent: 'space-around' } },
 	        _react2.default.createElement(
 	          'div',
-	          { style: style.menuItem },
-	          _react2.default.createElement(_Profile2.default, { user: this.props.user }),
-	          this.props.current_user.id != this.props.user.id ? _react2.default.createElement(_RelationshipRequest2.default, { fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser, createRelationships: this.props.userActions.createRelationships, deleteFriend: this.props.userActions.deleteFriend, user: this.props.user, current_user: this.props.current_user }) : '',
-	          _react2.default.createElement(_Friends2.default, { user: this.props.user, current_user: this.props.current_user, addFriend: this.props.userActions.addFriend, deleteIncoming: this.props.userActions.deleteIncoming })
+	          { style: { width: '400px' } },
+	          _react2.default.createElement(_Profile2.default, { user: user }),
+	          current_user.id != user.id ? _react2.default.createElement(_RelationshipRequest2.default, { fetchCurrentUser: fetchCurrentUser,
+	            createRelationships: createRelationships, deleteFriend: deleteFriend, user: user,
+	            current_user: current_user }) : '',
+	          _react2.default.createElement(_Friends2.default, { user: user, current_user: current_user, fetchUser: fetchUser, addFriend: addFriend, deleteIncoming: deleteIncoming })
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { style: style.menuItem },
-	          _react2.default.createElement(_Gallery2.default, { user: this.props.user, files: this.props.files, updateFiles: this.props.userActions.updateFiles,
-	            updateGallery: this.props.userActions.updateGallery }),
-	          _react2.default.createElement(_News2.default, { user: this.props.user, counter: this.props.counter, prevParams: this.props.prevParams, setPrevParams: this.props.userActions.setPrevParams, setCounter: this.props.userActions.setCounter, updateNews: this.props.userActions.updateNews,
-	            text: this.props.text, updateNewsText: this.props.userActions.updateNewsText,
-	            news_files: this.props.news_files, updateNewsFiles: this.props.userActions.updateNewsFiles })
+	          { style: { width: '400px' } },
+	          _react2.default.createElement(_Gallery2.default, { user: user, current_user: current_user, files: files, updateFiles: updateFiles, updateGallery: updateGallery }),
+	          _react2.default.createElement(_News2.default, { user: user, counter: counter, prevParams: prevParams, setPrevParams: setPrevParams,
+	            setCounter: setCounter, updateNews: updateNews,
+	            text: text, updateNewsText: updateNewsText,
+	            news_files: news_files, updateNewsFiles: updateNewsFiles })
 	        )
 	      );
 	    }
@@ -31489,7 +31640,6 @@
 	  return {
 	    userActions: (0, _redux.bindActionCreators)(userActions, dispatch),
 	    currentUserActions: (0, _redux.bindActionCreators)(currentUserActions, dispatch)
-
 	  };
 	}
 
@@ -31547,6 +31697,19 @@
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = News.__proto__ || Object.getPrototypeOf(News)).call.apply(_ref, [this].concat(args))), _this), _this.changeContent = function (e) {
 	      _this.props.updateNewsText(e.target.value);
+	      var url = e.target.value;
+	      if (url != undefined || url != '') {
+	        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+	        var match = url.match(regExp);
+	        console.log(match);
+	        if (match && match[2].length >= 11 && (typeof match[2][11] == 'undefined' || match[2][11] == ' ')) {
+	          _this.refs.video.style.display = '';
+	          _this.refs.video.src = 'https://www.youtube.com/embed/' + match[2].slice(0, 11) + '?autoplay=0';
+	        } else {
+	          _this.refs.video.style.display = 'none';
+	          _this.refs.video.src = '';
+	        }
+	      }
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
@@ -31561,6 +31724,9 @@
 	      data.append('news[text]', this.props.text);
 	      this.props.updateNews(data);
 	      this.props.updateNewsText('');
+	      this.props.updateNewsFiles([]);
+	      this.refs.video.style.display = 'none';
+	      this.refs.video.src = '';
 	    }
 	  }, {
 	    key: 'onDrop',
@@ -31588,59 +31754,68 @@
 	      }
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'border shadow' },
+	        null,
 	        _react2.default.createElement(
 	          'h3',
-	          { className: 'align-center' },
+	          { style: { textAlign: 'center' } },
 	          'News'
 	        ),
-	        _react2.default.createElement('textarea', { value: this.props.text, id: 'news', ref: 'comment', onChange: this.changeContent, type: 'text', placeholder: 'Type yours comment', cols: '32', rows: '2' }),
 	        _react2.default.createElement(
 	          'div',
-	          null,
+	          { style: { borderStyle: 'double', textAlign: 'center', backgroundColor: '#823737', paddingTop: '10px', paddingBottom: '10px' } },
+	          _react2.default.createElement('textarea', { value: this.props.text, id: 'news', ref: 'comment', onChange: this.changeContent, type: 'text', placeholder: 'Type yours comment', cols: '40', rows: '3' }),
 	          _react2.default.createElement(
-	            _reactDropzone2.default,
-	            { ref: 'dropzone', onDrop: this.onDrop.bind(this) },
-	            _react2.default.createElement(
-	              'div',
-	              { style: { height: 100 } },
-	              _react2.default.createElement(
-	                'h4',
-	                null,
-	                'Drop image here to upload '
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'button',
-	            { type: 'button', onClick: this.onOpenClick.bind(this) },
-	            'Open file'
-	          ),
-	          news_files.length > 0 ? _react2.default.createElement(
 	            'div',
 	            null,
 	            _react2.default.createElement(
-	              'h4',
-	              null,
-	              'You add ',
-	              news_files.length,
-	              ' images.'
+	              _reactDropzone2.default,
+	              { ref: 'dropzone', style: { height: '70px', width: '330px', backgroundColor: 'white', borderStyle: 'double', marginLeft: '27px', marginBottom: '10px', marginTop: '10px' }, onDrop: this.onDrop.bind(this) },
+	              _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                  'h4',
+	                  null,
+	                  'Drop news images here '
+	                )
+	              )
 	            ),
 	            _react2.default.createElement(
+	              'button',
+	              { type: 'button', onClick: this.onOpenClick.bind(this) },
+	              'Open file'
+	            ),
+	            news_files.length > 0 ? _react2.default.createElement(
 	              'div',
 	              null,
-	              news_files.map(function (file) {
-	                return _react2.default.createElement('img', { src: file.preview, width: '50', height: '50' });
-	              })
-	            )
-	          ) : null,
-	          _react2.default.createElement(
-	            'button',
-	            { id: 'create_news', onClick: this.createNews.bind(this) },
-	            'Send'
-	          )
-	        ),
-	        _react2.default.createElement(_NewsList2.default, { user: this.props.user, prevParams: this.props.prevParams, setPrevParams: this.props.setPrevParams, counter: this.props.counter, setCounter: this.props.setCounter })
+	              _react2.default.createElement(
+	                'h4',
+	                null,
+	                'You add ',
+	                news_files.length,
+	                ' images.'
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                null,
+	                news_files.map(function (file) {
+	                  return _react2.default.createElement('img', { src: file.preview, width: '50', height: '50' });
+	                })
+	              )
+	            ) : null,
+	            this.props.text.length > 0 ? _react2.default.createElement(
+	              'p',
+	              null,
+	              _react2.default.createElement(
+	                'button',
+	                { id: 'create_news', onClick: this.createNews.bind(this) },
+	                'Send'
+	              )
+	            ) : null
+	          ),
+	          _react2.default.createElement('iframe', { ref: 'video', id: 'videoObject', style: { display: 'none' }, type: 'text/html', width: '300', height: '300', frameBorder: '0', allowFullScreen: true }),
+	          _react2.default.createElement(_NewsList2.default, { user: this.props.user, prevParams: this.props.prevParams, setPrevParams: this.props.setPrevParams, counter: this.props.counter, setCounter: this.props.setCounter })
+	        )
 	      );
 	    }
 	  }]);
@@ -31757,12 +31932,7 @@
 	      });
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'News'
-	        ),
+	        { style: { padding: '10px' } },
 	        news
 	      );
 	    }
@@ -31802,10 +31972,13 @@
 	var NewsItem = function (_React$Component) {
 	  _inherits(NewsItem, _React$Component);
 
-	  function NewsItem() {
+	  function NewsItem(props) {
 	    _classCallCheck(this, NewsItem);
 
-	    return _possibleConstructorReturn(this, (NewsItem.__proto__ || Object.getPrototypeOf(NewsItem)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (NewsItem.__proto__ || Object.getPrototypeOf(NewsItem)).call(this, props));
+
+	    _this.isYoutubeLink = _this.isYoutubeLink.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(NewsItem, [{
@@ -31814,11 +31987,26 @@
 	      return typeof el != 'undefined' ? el : "";
 	    }
 	  }, {
+	    key: 'isYoutubeLink',
+	    value: function isYoutubeLink(text) {
+	      var url = text;
+	      if (url != undefined || url != '') {
+	        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+	        var match = url.match(regExp);
+	        if (match && match[2].length >= 11 && (typeof match[2][11] == 'undefined' || match[2][11] == ' ')) {
+	          return match[2].slice(0, 11);
+	        } else {
+	          return false;
+	        }
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var images = typeof this.props.news.gallery == 'undefined' ? '' : this.props.news.gallery.images.map(function (image) {
 	        return _react2.default.createElement('img', { key: image.id, src: image.image.thumb.url, style: { padding: 1 } });
 	      });
+	      var video = typeof this.isYoutubeLink(this.props.text) == 'boolean' ? '' : _react2.default.createElement('iframe', { style: { marginLeft: '15px', marginBottom: '5px' }, id: this.props.id, src: 'https://www.youtube.com/embed/' + this.isYoutubeLink(this.props.text) + '?autoplay=0', width: '262', height: '230', frameBorder: '0', allowFullScreen: true, type: 'text/html' });
 	      return _react2.default.createElement(
 	        'div',
 	        { key: this.props.id, style: { borderStyle: 'solid', backgroundColor: 'white', borderWidth: '1px', marginTop: '5px', padding: '3px' } },
@@ -31835,7 +32023,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' } },
+	          { style: { display: 'flex', minWidth: '300px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' } },
 	          _react2.default.createElement(
 	            'h3',
 	            null,
@@ -31845,7 +32033,8 @@
 	            'div',
 	            null,
 	            images
-	          )
+	          ),
+	          video
 	        )
 	      );
 	    }
@@ -31896,6 +32085,7 @@
 	  _createClass(Profile, [{
 	    key: 'render',
 	    value: function render() {
+	      var inline = { inline: 'inline-block', margin: '0', padding: '0' };
 	      var _props$user = this.props.user,
 	          name = _props$user.name,
 	          email = _props$user.email,
@@ -31915,27 +32105,19 @@
 	        null,
 	        _react2.default.createElement(
 	          'h3',
-	          null,
+	          { style: { inline: inline, textAlign: 'center' } },
 	          'Profile info'
 	        ),
-	        _react2.default.createElement('img', { src: avatar.small.url }),
 	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Name: ',
-	          name
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Email: ',
-	          email
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Email: ',
-	          id
+	          'div',
+	          { style: { borderStyle: 'double', textAlign: 'center', backgroundColor: '#7b936d' } },
+	          _react2.default.createElement(
+	            'h4',
+	            { style: { inline: inline } },
+	            'Name: ',
+	            name
+	          ),
+	          _react2.default.createElement('img', { style: { inline: inline, marginBottom: '15px', borderStyle: 'double', backgroundColor: 'white' }, src: avatar.small.url })
 	        )
 	      );
 	    }
@@ -32014,46 +32196,51 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var i = 0;
 	      var _props = this.props,
 	          files = _props.files,
-	          user = _props.user;
+	          user = _props.user,
+	          current_user = _props.current_user;
 
-	      var gallery = typeof this.props.user.gallery == 'undefined' ? '' : this.props.user.gallery.images.map(function (image) {
-	        return _react2.default.createElement('img', { key: image.id, className: 'padding inline-block', src: image.image.smaller.url, style: { width: 72, height: 72 } });
+	      var gallery = typeof user.gallery == 'undefined' ? '' : user.gallery.images.slice(-10).map(function (image) {
+	        return _react2.default.createElement('img', { key: image.id, className: 'padding inline-block', src: image.image.smaller.url, style: { width: 67, height: 67 } });
 	      });
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        gallery,
 	        _react2.default.createElement(
+	          'h3',
+	          { style: { textAlign: 'center' } },
+	          'Gallery'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { borderStyle: 'double', textAlign: 'center', backgroundColor: '#5b4a77', paddingTop: '10px', paddingBottom: '10px' } },
+	          user.gallery.images.length > 0 ? gallery : _react2.default.createElement(
+	            'h3',
+	            null,
+	            'Gallery is empty now'
+	          )
+	        ),
+	        user.id != current_user.id ? '' : _react2.default.createElement(
 	          _reactDropzone2.default,
-	          { ref: 'dropzone', onDrop: this.onDrop.bind(this) },
+	          { ref: 'dropzone', style: { height: '70px', width: '370px', borderStyle: 'double', paddingLeft: '20px', margin: '5px' }, onDrop: this.onDrop.bind(this) },
 	          _react2.default.createElement(
 	            'div',
-	            { style: { height: 100 } },
+	            null,
 	            _react2.default.createElement(
 	              'h4',
 	              null,
-	              'Drop image here to upload '
+	              'Drop image here to upload into yours gallery '
 	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'button', onClick: this.onOpenClick.bind(this) },
-	          'Open file'
 	        ),
 	        files.length > 0 ? _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement(
-	            'button',
-	            { onClick: this.uploadImages.bind(this) },
-	            'Upload files'
-	          ),
-	          _react2.default.createElement(
 	            'h4',
-	            null,
+	            { style: { margin: '5px' } },
 	            'You add ',
 	            files.length,
 	            ' images.'
@@ -32064,6 +32251,11 @@
 	            files.map(function (file) {
 	              return _react2.default.createElement('img', { src: file.preview, width: '50', height: '50' });
 	            })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { style: { margin: '5px' }, onClick: this.uploadImages.bind(this) },
+	            'Upload files'
 	          )
 	        ) : null
 	      );
@@ -32115,6 +32307,9 @@
 	  }
 
 	  _createClass(Friends, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {}
+	  }, {
 	    key: 'AddFriend',
 	    value: function AddFriend(friend) {
 	      this.props.addFriend({ friend_id: friend.id });
@@ -32125,21 +32320,22 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      console.log('fruend props', this.props);
+	      var _props = this.props,
+	          user = _props.user,
+	          current_user = _props.current_user;
 	      var _props$user = this.props.user,
 	          incoming = _props$user.incoming,
 	          outcoming = _props$user.outcoming,
 	          friends = _props$user.friends;
 
-	      var friend_list = typeof friends == 'undefined' ? '' : friends.slice(0, 9).map(function (friend) {
-
+	      var friend_list = typeof friends == 'undefined' ? '' : friends.slice(0, 8).map(function (friend) {
 	        return _react2.default.createElement(
 	          'div',
-	          { style: { display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' } },
+	          { key: friend.id, style: { display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' } },
 	          _react2.default.createElement(
 	            _reactRouter.Link,
 	            { to: '/user/' + friend.id },
-	            _react2.default.createElement('img', { key: friend.id, src: friend.avatar.smaller.url, style: { width: 72, height: 72 } }),
+	            _react2.default.createElement('img', { src: friend.avatar.smaller.url, style: { width: 72, height: 72 } }),
 	            _react2.default.createElement(
 	              'h5',
 	              { style: { margin: '3px', textAlign: 'center' } },
@@ -32155,7 +32351,7 @@
 	          _react2.default.createElement(
 	            _reactRouter.Link,
 	            { to: '/user/' + friend.id },
-	            _react2.default.createElement('img', { key: friend.id, src: friend.avatar.smaller.url, style: { width: 72, height: 72 } }),
+	            _react2.default.createElement('img', { src: friend.avatar.smaller.url, style: { width: 72, height: 72 } }),
 	            _react2.default.createElement(
 	              'h5',
 	              { style: { margin: '3px', textAlign: 'center' } },
@@ -32164,19 +32360,24 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: _this2.AddFriend.bind(_this2, friend) },
-	            'Add to friends'
+	            { style: { textAlign: 'center', marginBottom: '10px', marginLeft: '10px' }, onClick: _this2.AddFriend.bind(_this2, friend) },
+	            'Accept'
 	          )
 	        );
 	      });
 	      var outcoming_list = typeof outcoming == 'undefined' ? '' : outcoming.map(function (friend) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { key: friend.id, style: { display: 'flex', paddingLeft: '20px', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' } },
 	          _react2.default.createElement(
-	            'h5',
-	            null,
-	            friend.name
+	            _reactRouter.Link,
+	            { to: '/user/' + friend.id },
+	            _react2.default.createElement('img', { src: friend.avatar.smaller.url, style: { width: 72, height: 72 } }),
+	            _react2.default.createElement(
+	              'h5',
+	              { style: { margin: '3px', textAlign: 'center' } },
+	              friend.name
+	            )
 	          )
 	        );
 	      });
@@ -32185,15 +32386,24 @@
 	        null,
 	        _react2.default.createElement(
 	          'h3',
-	          null,
+	          { style: { textAlign: 'center', marginBottom: '5px' } },
 	          'Friends'
 	        ),
 	        _react2.default.createElement(
+	          'h5',
+	          { style: { textAlign: 'center', marginTop: '5px' } },
+	          '(',
+	          user.name,
+	          ' have ',
+	          typeof user.friends.length != 'undefined' ? user.friends.length : null,
+	          ' friends)'
+	        ),
+	        _react2.default.createElement(
 	          'div',
-	          { style: { display: 'flex', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'flex-start' } },
+	          { style: { display: 'flex', borderStyle: 'double', backgroundColor: '#596768', paddingTop: '20px', paddignBot: '20px', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'flex-start' } },
 	          friend_list
 	        ),
-	        this.props.current_user.id == this.props.user.id ? _react2.default.createElement(
+	        current_user.id == user.id && user.incoming.length > 0 ? _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement(
@@ -32201,13 +32411,25 @@
 	            null,
 	            'Incoming requests'
 	          ),
-	          incoming_list,
+	          _react2.default.createElement(
+	            'div',
+	            { style: { display: 'flex', borderStyle: 'double', backgroundColor: '#7b936d', paddingTop: '20px', paddignBot: '20px', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'flex-start' } },
+	            incoming_list
+	          )
+	        ) : '',
+	        current_user.id == user.id && user.outcoming.length > 0 ? _react2.default.createElement(
+	          'div',
+	          null,
 	          _react2.default.createElement(
 	            'h3',
 	            null,
 	            'Outcoming requests'
 	          ),
-	          outcoming_list
+	          _react2.default.createElement(
+	            'div',
+	            { style: { display: 'flex', borderStyle: 'double', backgroundColor: '#7b936d', paddingTop: '20px', paddignBot: '20px', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'flex-start' } },
+	            outcoming_list
+	          )
 	        ) : ''
 	      );
 	    }
@@ -32292,30 +32514,30 @@
 	      if (is_friends) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { style: { borderStyle: 'double', backgroundColor: '#7b936d', marginTop: '20px', paddignBottom: '20px', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'flex-start' } },
 	          _react2.default.createElement(
 	            'h3',
-	            null,
+	            { style: { textAlign: 'center' } },
 	            'User in yours friend list'
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.DeleteFriend.bind(this) },
+	            { style: { textAlign: 'center', marginBottom: '10px', marginLeft: '10px' }, id: 'Delete', onClick: this.DeleteFriend.bind(this) },
 	            'Delete'
 	          )
 	        );
 	      }
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { style: { borderStyle: 'double', backgroundColor: '#7b936d', paddingTop: '20px', paddignBottom: '20px', marginTop: '15px', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'flex-start' } },
 	        outcoming_requests ? _react2.default.createElement(
 	          'h3',
-	          null,
+	          { style: { textAlign: 'center' } },
 	          'You send friend request to ',
 	          user.name
 	        ) : _react2.default.createElement(
 	          'button',
-	          { onClick: this.SendInvite.bind(this) },
+	          { style: { textAlign: 'center', marginBottom: '10px', marginLeft: '10px' }, onClick: this.SendInvite.bind(this) },
 	          'Add to friends'
 	        )
 	      );
@@ -32374,7 +32596,9 @@
 	      var _this2 = this;
 
 	      var data = new FormData();
-	      data.append('user[avatar]', this.props.files[0]);
+	      if (typeof this.props.files[0] !== "undefined") {
+	        data.append('user[avatar]', this.props.files[0]);
+	      }
 	      data.append('user[email]', this.refs.email.value);
 	      data.append('user[name]', this.refs.name.value);
 	      _axios2.default.patch('/users/' + this.props.current_user.id, data).then(function (response) {
@@ -32403,15 +32627,15 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { style: { display: 'flex', width: '770px', backgroundColor: 'grey', flexDirection: 'column', alignContent: 'space-around', justifyContent: 'space-around' } },
+	        { style: { display: 'flex', width: '870px', flexDirection: 'column', alignContent: 'space-around', justifyContent: 'space-around' } },
 	        _react2.default.createElement(
 	          'h3',
 	          { style: { textAlign: 'center' } },
-	          'Profile info'
+	          'Settings'
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          null,
+	          { style: { borderStyle: 'double', textAlign: 'left', backgroundColor: '#823737', paddingLeft: '100px', paddingBottom: '10px' } },
 	          _react2.default.createElement(
 	            'h3',
 	            null,
@@ -32420,7 +32644,7 @@
 	          _react2.default.createElement(
 	            'p',
 	            null,
-	            _react2.default.createElement('input', { type: 'text', ref: 'name', defaultValue: current_user.name })
+	            _react2.default.createElement('input', { type: 'text', id: 'edit_name', ref: 'name', defaultValue: current_user.name })
 	          ),
 	          _react2.default.createElement(
 	            'h3',
@@ -32430,7 +32654,7 @@
 	          _react2.default.createElement(
 	            'p',
 	            null,
-	            _react2.default.createElement('input', { type: 'text', ref: 'email', defaultValue: current_user.email })
+	            _react2.default.createElement('input', { type: 'text', id: 'edit_email', ref: 'email', defaultValue: current_user.email })
 	          ),
 	          _react2.default.createElement(
 	            'h3',
@@ -32454,11 +32678,10 @@
 	          _react2.default.createElement(
 	            'p',
 	            null,
-	            '  ',
 	            _react2.default.createElement(
 	              'button',
 	              { type: 'button', onClick: this.onOpenClick.bind(this) },
-	              'Open file'
+	              ' Open file'
 	            )
 	          ),
 	          files.length > 0 ? _react2.default.createElement(
@@ -32482,7 +32705,7 @@
 	            null,
 	            _react2.default.createElement(
 	              'button',
-	              { id: 'create_news', onClick: this.updateSettings.bind(this) },
+	              { id: 'save_changes', onClick: this.updateSettings.bind(this) },
 	              'Save'
 	            )
 	          )
@@ -32541,6 +32764,7 @@
 	  _createClass(FriendList, [{
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
+	      this.props.fetchCurrentUser();
 	      this.props.setCounter(25);
 	    }
 	  }, {
@@ -32573,10 +32797,10 @@
 	    key: 'render',
 	    value: function render() {
 	      var current_user = this.props.current_user;
-	      var friends = this.props.current_user.friends.slice(0, this.props.counter).map(function (friend) {
+	      var friends = current_user.friends.slice(0, this.props.counter).map(function (friend) {
 	        return _react2.default.createElement(
 	          'div',
-	          { id: friend.id },
+	          { key: friend.id },
 	          _react2.default.createElement(
 	            _reactRouter.Link,
 	            { to: '/user/' + friend.id },
@@ -32594,19 +32818,22 @@
 	        );
 	      });
 	      var i = 1;
-	      console.log(friends.filter(function (friend) {}));
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { style: { width: '870px' } },
 	        _react2.default.createElement(
-	          'h1',
+	          'h3',
 	          { style: { textAlign: 'center' } },
 	          'Friends'
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { style: { display: 'flex', width: '770px', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around' } },
-	          friends
+	          { style: { display: 'flex', borderStyle: 'double', textAlign: 'left', paddingLeft: '100px', backgroundColor: '#823737', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around', paddingBottom: '10px' } },
+	          current_user.friends.length > 0 ? friends : _react2.default.createElement(
+	            'h3',
+	            { style: { textAlign: 'center' } },
+	            'No friends in yours list'
+	          )
 	        )
 	      );
 	    }
@@ -32627,13 +32854,244 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(182);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _reactRouter = __webpack_require__(183);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var GalleryPage = function (_React$Component) {
+	  _inherits(GalleryPage, _React$Component);
+
+	  function GalleryPage(props) {
+	    _classCallCheck(this, GalleryPage);
+
+	    var _this = _possibleConstructorReturn(this, (GalleryPage.__proto__ || Object.getPrototypeOf(GalleryPage)).call(this, props));
+
+	    _this.infiniteLoad = _this.infiniteLoad.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(GalleryPage, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.fetchCurrentUser();
+	      this.props.setCounter(3);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'LoadMore',
+	    value: function LoadMore() {
+	      this.props.setCounter(this.props.counter + 1);
+	    }
+	  }, {
+	    key: 'infiniteLoad',
+	    value: function infiniteLoad() {
+	      var height = document.getElementsByTagName('body')[0].clientHeight - (window.innerHeight + window.pageYOffset);
+	      if (height < 60) {
+	        this.LoadMore();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var current_user = this.props.current_user;
+	      var revert = 0 - this.props.counter;
+	      var images = current_user.gallery.images.slice(revert).sort(function (a, b) {
+	        if (a.id > b.id) {
+	          return -1;
+	        }
+	        if (a.id < b.id) {
+	          return 1;
+	        }
+	        return 0;
+	      }).map(function (image) {
+	        return _react2.default.createElement('img', { key: image.id, src: image.image.url, style: { width: '700px' } });
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { style: { width: '870px' } },
+	        _react2.default.createElement(
+	          'h3',
+	          { style: { textAlign: 'center' } },
+	          'Gallery'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { display: 'flex', width: '770px', borderStyle: 'double', paddingBottom: '10px', textAlign: 'left', backgroundColor: '#823737', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around' } },
+	          images
+	        )
+	      );
+	    }
+	  }]);
+
+	  return GalleryPage;
+	}(_react2.default.Component);
+
+	exports.default = GalleryPage;
+
+/***/ },
+/* 321 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(182);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _reactRouter = __webpack_require__(183);
+
+	var _NewsItem = __webpack_require__(313);
+
+	var _NewsItem2 = _interopRequireDefault(_NewsItem);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AllNews = function (_React$Component) {
+	  _inherits(AllNews, _React$Component);
+
+	  function AllNews(props) {
+	    _classCallCheck(this, AllNews);
+
+	    var _this = _possibleConstructorReturn(this, (AllNews.__proto__ || Object.getPrototypeOf(AllNews)).call(this, props));
+
+	    _this.infiniteLoad = _this.infiniteLoad.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(AllNews, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.setCounter(15);
+	      this.props.fetchNews();
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      window.removeEventListener('scroll', this.infiniteLoad);
+	    }
+	  }, {
+	    key: 'LoadMore',
+	    value: function LoadMore() {
+	      this.props.setCounter(this.props.counter + 10);
+	    }
+	  }, {
+	    key: 'infiniteLoad',
+	    value: function infiniteLoad() {
+	      var height = document.getElementsByTagName('body')[0].clientHeight - (window.innerHeight + window.pageYOffset);
+	      if (height < 60) {
+	        this.LoadMore();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          counter = _props.counter,
+	          allNews = _props.allNews,
+	          current_user = _props.current_user;
+
+	      var news = typeof allNews == 'undefined' ? '' : allNews.slice(0, counter).sort(function (a, b) {
+	        if (a.id > b.id) {
+	          return -1;
+	        }
+	        if (a.id < b.id) {
+	          return 1;
+	        }
+	        return 0;
+	      }).map(function (news) {
+	        return _react2.default.createElement(_NewsItem2.default, { news: news, key: news.id, current_user: current_user,
+	          id: news.user_id, name: news.user.name, url: news.user.avatar.url, text: news.text });
+	      });
+	      var i = 1;
+	      return _react2.default.createElement(
+	        'div',
+	        { style: { width: '870px' } },
+	        _react2.default.createElement(
+	          'h3',
+	          { style: { textAlign: 'center' } },
+	          'News'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { borderStyle: 'double', textAlign: 'center', backgroundColor: '#5b4a77', paddingTop: '10px', paddingBottom: '10px' } },
+	          _react2.default.createElement(
+	            'div',
+	            { style: { display: 'flex', paddingLeft: '20px', marginLeft: '250px', width: '300px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around' } },
+	            news
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AllNews;
+	}(_react2.default.Component);
+
+	exports.default = AllNews;
+
+/***/ },
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _redux = __webpack_require__(275);
 
-	var _reduxThunk = __webpack_require__(321);
+	var _reduxThunk = __webpack_require__(323);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reducers = __webpack_require__(322);
+	var _reducers = __webpack_require__(324);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -32644,7 +33102,7 @@
 	exports.default = (0, _redux.createStore)(_reducers2.default, middleware);
 
 /***/ },
-/* 321 */
+/* 323 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32672,7 +33130,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 322 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32683,11 +33141,11 @@
 
 	var _redux = __webpack_require__(275);
 
-	var _currentUserReducer = __webpack_require__(323);
+	var _currentUserReducer = __webpack_require__(325);
 
 	var _currentUserReducer2 = _interopRequireDefault(_currentUserReducer);
 
-	var _userReducer = __webpack_require__(324);
+	var _userReducer = __webpack_require__(326);
 
 	var _userReducer2 = _interopRequireDefault(_userReducer);
 
@@ -32699,7 +33157,7 @@
 	});
 
 /***/ },
-/* 323 */
+/* 325 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32712,24 +33170,36 @@
 
 	exports.default = reducer;
 	function reducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { errors: [] };
 	  var action = arguments[1];
 
 	  switch (action.type) {
 	    case "FETCH_CURRENT_USER":
 	      {
 	        return _extends({}, state, { currentUser: action.payload });
+	        break;
 	      }
 	    case "DESTROY_SESSION":
 	      {
 	        return _extends({}, state, { currentUser: action.payload });
+	        break;
+	      }
+	    case "FETCH_NEWS":
+	      {
+	        return _extends({}, state, { allNews: action.payload });
+	        break;
+	      }
+	    case "SET_ERRORS":
+	      {
+	        return _extends({}, state, { errors: action.payload });
+	        break;
 	      }
 	  }
 	  return state;
 	}
 
 /***/ },
-/* 324 */
+/* 326 */
 /***/ function(module, exports) {
 
 	"use strict";
