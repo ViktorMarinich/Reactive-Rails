@@ -21,28 +21,27 @@ export default class Gallery extends React.Component{
   }
   render() {
     let i=0;
-    const {files, user}=this.props
-    const gallery= (typeof this.props.user.gallery =='undefined')?'':this.props.user.gallery.images.map(function(image){
-    return <img key={image.id} className="padding inline-block" src={image.image.smaller.url} style={{width: 72, height: 72}} ></img>
-})
+    const {files, user,current_user}=this.props
+    const gallery= (typeof user.gallery =='undefined')?'':user.gallery.images.slice(-10).map(function(image){
+        return <img key={image.id} className="padding inline-block" src={image.image.smaller.url} style={{width: 67, height: 67}} ></img>
+      })
     return (
       <div>
-          {gallery}
-          <Dropzone ref="dropzone"   onDrop={this.onDrop.bind(this)} >
-            <div style={{height: 100}}><h4>Drop image here to upload </h4></div>
-          </Dropzone>
-          <button type="button" onClick={this.onOpenClick.bind(this)}>
-              Open file
-          </button>
-          {(files.length >0 )? <div >
-          <button  onClick={this.uploadImages.bind(this)}>Upload files</button>
-          <h4>You add {files.length} images.</h4>
-          <div >
-            {files.map((file) =>
-            { i=i+1
-            return  <img key={i} src={file.preview} width="50" height="50"/>})}
-          </div>
-          </div> : null}
+          <h3 style={{textAlign: 'center'}}>Gallery</h3>
+        <div style={{ borderStyle: 'double',textAlign: 'center', backgroundColor:'#5b4a77', paddingTop: '10px', paddingBottom: '10px'}}>
+        {(user.gallery.images.length>0)? gallery : <h3>Gallery is empty now</h3>}
+        </div>
+          {(user.id!= current_user.id)? '':
+          <Dropzone ref="dropzone" style={{height: '70px', width: '370px', borderStyle: 'double', paddingLeft: '20px',margin: '5px'}} onDrop={this.onDrop.bind(this)} >
+            <div ><h4>Drop image here to upload into yours gallery </h4></div>
+          </Dropzone>}
+            {(files.length >0 )? <div >
+            <h4 style={{margin: '5px'}}>You add {files.length} images.</h4>
+            <div >
+              {files.map((file) => <img src={file.preview} width="50" height="50"/>)}
+            </div>
+            <button style={{ margin: '5px'}}  onClick={this.uploadImages.bind(this)}>Upload files</button>
+            </div> : null}
       </div>
     );
   }
