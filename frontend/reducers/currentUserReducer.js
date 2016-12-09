@@ -1,4 +1,4 @@
-export default function reducer(state={ }, action) {
+export default function reducer(state={errors:[] }, action) {
     switch (action.type) {
       case "FETCH_CURRENT_USER": {
         return {...state, currentUser: action.payload}
@@ -10,6 +10,10 @@ export default function reducer(state={ }, action) {
       }
       case "FETCH_NEWS": {
         return {...state, allNews: action.payload}
+        break;
+      }
+      case "SET_ERRORS": {
+        return {...state, errors: action.payload}
         break;
       }
     }
