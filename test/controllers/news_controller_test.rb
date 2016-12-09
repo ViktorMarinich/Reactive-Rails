@@ -11,11 +11,11 @@ class NewsControllerTest < ActionController::TestCase
   def test_create_news
     login(@user)
     assert_difference('News.count',1) do
-      post :create, id: @user, news: { text: "some text"}
+      post :create, id: @user, news: { text: "https://www.youtube.com/watch?v=6qOvNgEsZ9s"}
     end
     assert_response :success
     news = JSON.parse(@response.body)
-    assert_equal "some text", news['text']
+    assert_equal "https://www.youtube.com/watch?v=6qOvNgEsZ9s", news['text']
     assert_nil news['gallery']
   end
 
