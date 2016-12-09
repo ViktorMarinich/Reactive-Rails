@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux'
 import * as currentUserActions from "./actions/currentUserActions"
 import * as userActions from "./actions/userActions"
 import { Link } from 'react-router';
-import axios from 'axios';
 
 class App extends Component {
   componentDidMount(){
@@ -15,32 +14,57 @@ class App extends Component {
   SignOut(e){
     e.preventDefault()
     this.props.currentUserActions.destroySession()
+    this.props.router.push(`/`)
   }
   render() {
-    const {children} = this.props
-
-    if (typeof this.props.current_user=='undefined') {return <div>Loading...</div>}
-    if (this.props.current_user== null){
+    const {children, errors, current_user, files, router, counter, allNews} = this.props
+    const {fetchNews, fetchCurrentUser, setErrors} = this.props.currentUserActions
+    const {updateFiles, setCounter} = this.props.userActions
+    let i =0
+    const error_list = (typeof errors.length !='undefined')? errors.map((error)=>{
+      i=i+1
+      return <h4  key={i} style={{ color: 'red' , textAlign: 'left', paddingLeft: '20px'}}>{error}</h4>
+    }): ''
+    if (typeof current_user=='undefined') {return <div>Loading...</div>}
+    if (current_user== null){
       return(
         <div>
-          <SignIn router={this.props.router} fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
-          <SignUp router={this.props.router} files={this.props.files} updateFiles={this.props.userActions.updateFiles} fetchCurrentUser={this.props.currentUserActions.fetchCurrentUser}/>
-        </div>
+          {(error_list=='')? '':
+          <div style={{ textAlign: 'center'}}>
+            <div style={{width: '400px', display: 'inline-block'}}>
+              <h3 style={{ textAlign: 'left', color: 'red'}} > Something went wrong:</h3>
+              {error_list}
+            </div>
+          </div>}
+          <div style={{display: 'flex', width: '1000px',flexDirection: 'row', justifyContent: 'space-around'}}>
+            <div style={{width: '200px', display: 'inline-block'}}>
+              <SignIn router={router}  setErrors={setErrors} fetchCurrentUser={fetchCurrentUser}/>
+            </div>
+            <div style={{width: '200px', display: 'inline-block'}}>
+              <SignUp router={router}  setErrors={setErrors} files={files}
+              updateFiles={updateFiles} fetchCurrentUser={fetchCurrentUser}/>
+            </div>
+          </div>
+      </div>
+
     )}
     return (
-      <div style={{display: 'flex', width: '1000px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
+      <div style={{display: 'flex', width: '1000px',flexDirection: 'row', justifyContent: 'space-around'}}>
         <div style={{width: '200px', display: 'inline-block'}}>
-          <p><Link to={`/user/${this.props.current_user.id}`}>My profile</Link></p>
+          <p><Link to={`/user/${current_user.id}`}>My profile</Link></p>
           <p><Link to={`/settings`}>Settings</Link></p>
           <p><Link to={`/friends`}>Friends</Link></p>
           <p><Link to={`/gallery`}>Gallery</Link></p>
           <p><Link to={`/news`}>News</Link></p>
           <p><Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link></p>
         </div>
-        <div>{this.props.children&& React.cloneElement(this.props.children, {current_user:
-            this.props.current_user, files: this.props.files, router: this.props.router, counter: this.props.counter,
-             updateFiles: this.props.userActions.updateFiles,allNews: this.props.allNews, fetchNews: this.props.currentUserActions.fetchNews,setCounter: this.props.userActions.setCounter, fetchCurrentUser: this.props.currentUserActions.fetchCurrentUser})}</div>
-      </div>
+        <div>
+          {children && React.cloneElement(children, {current_user:current_user,
+          files: files, router: router, counter: counter, updateFiles: updateFiles,
+          allNews: allNews, fetchNews: fetchNews, setCounter: setCounter,
+          fetchCurrentUser: fetchCurrentUser})}
+        </div>
+     </div>
   );
   }
 }
@@ -50,6 +74,7 @@ function mapStateToProps(state) {
     allNews: state.currentUser.allNews,
     files: state.user.files,
     counter: state.user.counter,
+    errors: state.currentUser.errors
   }
 }
 
