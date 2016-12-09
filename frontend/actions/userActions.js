@@ -12,23 +12,17 @@ export function updateUser(id,params) {
   return function(dispatch) {
     axios.patch(`/users/${id}`, params)
     .then((response) => {
-      console.log('user-res',response.data)
       dispatch({type: "UPDATE_USER", payload: response.data})
-     }).catch(function (response) {
-        console.log('error',response);
-     });
+     })
   }
 }
 export function updateNews(params) {
   return function(dispatch) {
+    dispatch({type: "UPDATING_NEWS_START"})
     axios.post('/news', params)
       .then(function (response) {
-        console.log('response-news',response.data);
         dispatch({type: "UPDATE_NEWS", payload: response.data})
       })
-      .catch(function (response) {
-        console.log('error',response);
-      });
   }
 }
 export function updateNewsText(value) {
@@ -84,7 +78,6 @@ export function addFriend(params) {
   return function(dispatch) {
     axios.post('/friends', params)
     .then((response) => {
-      console.log(response.data)
       dispatch({type: "ADD_FRIEND", payload: response.data})
     })
   }
@@ -105,5 +98,10 @@ export function setPrevParams(value) {
   return {
     type: 'SET_PREV_PARAMS',
     payload: value,
+  }
+}
+export function updatingGalleryStart() {
+  return {
+    type: 'UPDATING_GALLERY_START',
   }
 }
