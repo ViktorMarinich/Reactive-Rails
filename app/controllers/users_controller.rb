@@ -18,7 +18,7 @@ class UsersController < ApplicationController
         sign_in(@user)
         render :json => @user.to_json
       else
-        render :json => @user.errors , status: 403
+        render :json => @user.errors.to_json
       end
     end
   end
