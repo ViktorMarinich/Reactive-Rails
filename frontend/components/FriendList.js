@@ -8,8 +8,9 @@ export default class FriendList extends React.Component{
     this.infiniteLoad = this.infiniteLoad.bind(this)
   }
   componentWillMount(){
-      this.props.setCounter(25)
-    }
+    this.props.fetchCurrentUser()
+    this.props.setCounter(25)
+  }
   componentDidMount(){
     window.addEventListener('scroll', this.infiniteLoad);
   }
@@ -42,7 +43,7 @@ export default class FriendList extends React.Component{
       <div  style={{width: '870px' }}>
         <h3 style={{ textAlign: 'center'}}>Friends</h3>
           <div style={{display: 'flex', borderStyle: 'double',textAlign: 'left', paddingLeft:'100px' ,backgroundColor:'#823737', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around', paddingBottom: '10px'}}>
-          {(current_user.friends.length>0)?  {friends} : <h3 style={{textAlign: 'center'}}>No friends in yours list</h3>}
+          {(current_user.friends.length>0)?  friends : <h3 style={{textAlign: 'center'}}>No friends in yours list</h3>}
         </div>
       </div>
       )
