@@ -31,7 +31,7 @@ export default class GalleryPage extends React.Component{
       if (a.id > b.id) { return -1;}
       if (a.id < b.id) { return 1; }
       return 0; }).map((image)=>{
-        return   <img key={image.id}  src={image.image.url} style={{width: '700px'}} ></img>
+        return   <img key={image.id}  src={image.image.url} style={{width: '700px', marginTop: '20px'}} ></img>
       })
     return (
       <div style={{width: '870px' }}>
