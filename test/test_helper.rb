@@ -10,7 +10,7 @@ Capybara.register_driver :selenium do |app|
 end
 
 Capybara.javascript_driver = :selenium
-Capybara.default_max_wait_time = 10
+Capybara.default_max_wait_time = 5
 include Rails.application.routes.url_helpers
 
 class ActiveSupport::TestCase
