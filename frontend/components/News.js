@@ -24,6 +24,7 @@ export default class News extends React.Component{
   changeContent = (e) => {
     this.props.updateNewsText( e.target.value)
     const url = e.target.value
+
     if (url != undefined || url != '') {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
@@ -36,6 +37,11 @@ export default class News extends React.Component{
           this.refs.video.src=''
         }
     }
+    if ( e.target.value.length > 200 ){
+      this.refs.length.style.color='black'
+    } else {
+      this.refs.length.style.color='#f4a442'
+    }
   }
   render() {
     const {news_files, user}=this.props
@@ -46,7 +52,8 @@ export default class News extends React.Component{
     <div >
       <h3 style={{textAlign: 'center'}}>News</h3>
     <div style={{ borderStyle: 'double',textAlign: 'center', backgroundColor:'#823737', paddingTop: '10px', paddingBottom: '10px'}}>
-      <textarea value={this.props.text} id='news' ref='comment'  onChange={this.changeContent}  type='text' placeholder='Type yours comment' cols='40' rows='3'/>
+      <textarea value={this.props.text} id='news' ref='comment'  onChange={this.changeContent}  type='text' placeholder='Type yours comment' cols='40' rows='6'/>
+      <p style={{textAlign: 'right', paddingRight: '40px',fontStyle: 'bold', color: '#f4a442'}}>{(this.props.text.length == 0)? null : <span ref='length' > {this.props.text.length} </span>}</p>
         <div>
             <Dropzone ref="dropzone" style={{height: '70px', width: '330px', backgroundColor:'white',borderStyle: 'double',marginLeft: '27px', marginBottom: '10px', marginTop: '10px'}}  onDrop={this.onDrop.bind(this)} >
               <div ><h4>Drop news images here </h4></div>
@@ -60,10 +67,10 @@ export default class News extends React.Component{
               {news_files.map((file) => <img src={file.preview} width="50" height="50"/>)}
             </div>
             </div> : null}
-            {(this.props.text.length>0)? <p><button id='create_news' onClick={this.createNews.bind(this)}>Send</button></p>: null}
+            {(this.props.text.length>0)? <p><button disabled={this.props.text.length >200} id='create_news' onClick={this.createNews.bind(this)}>Send</button></p>: null}
         </div>
         <iframe ref='video' id="videoObject" style={{ display: 'none'}}  type="text/html" width="300" height="300" frameBorder="0" allowFullScreen></iframe>
-        <NewsList user={this.props.user} prevParams={this.props.prevParams} setPrevParams={this.props.setPrevParams} counter={this.props.counter} setCounter={this.props.setCounter} />
+        <NewsList updating_news={this.props.updating_news} user={this.props.user} prevParams={this.props.prevParams} setPrevParams={this.props.setPrevParams} counter={this.props.counter} setCounter={this.props.setCounter} />
         </div>
     </div>
     )
