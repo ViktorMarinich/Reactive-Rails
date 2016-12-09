@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, propTypes } from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as userActions from "../actions/userActions"
@@ -21,25 +21,29 @@ class User extends Component{
   componentWillReceiveProps(nextProps) {
     if (nextProps.params != this.props.params){
       this.props.userActions.fetchUser(nextProps.params.userId)
+      this.props.currentUserActions.fetchCurrentUser()
       this.props.userActions.updateNewsText('')
     }
   }
   render() {
     const {user, current_user, files, counter, prevParams,text,news_files}=this.props
+    if (typeof user.friends == 'undefined'){
+      return <div>Loading ...</div>
+    }
     const {addFriend,updateFiles, updateGallery,setPrevParams,deleteIncoming,deleteFriend,
-      createRelationships,updateNewsFiles, updateNewsText, setCounter, updateNews}=this.props.userActions
+      createRelationships,updateNewsFiles, updateNewsText, fetchUser,setCounter, updateNews}=this.props.userActions
     const {fetchCurrentUser}=this.props.currentUserActions
     return (
-      <div style={{display: 'flex', width: '770px', backgroundColor: 'grey',flexDirection: 'row', justifyContent: 'space-around'}}>
-        <div style={style.menuItem}>
+      <div style={{display: 'flex', width: '870px',flexDirection: 'row', justifyContent: 'space-around'}}>
+        <div style={{width: '400px'}}>
           <Profile user={user}/>
           {(current_user.id!=user.id)? <RelationshipRequest  fetchCurrentUser={fetchCurrentUser}
            createRelationships={createRelationships} deleteFriend={deleteFriend} user={user}
            current_user={current_user}/> :''}
-          <Friends user={user} current_user={current_user} addFriend={addFriend} deleteIncoming={deleteIncoming}/>
+          <Friends user={user} current_user={current_user} fetchUser={fetchUser} addFriend={addFriend} deleteIncoming={deleteIncoming}/>
         </div>
-        <div style={style.menuItem}>
-          <Gallery user={user} files={files} updateFiles={updateFiles} updateGallery={updateGallery}/>
+        <div style={{width: '400px'}}>
+          <Gallery user={user} current_user={current_user} files={files} updateFiles={updateFiles} updateGallery={updateGallery}/>
           <News user={user} counter={counter} prevParams={prevParams} setPrevParams={setPrevParams}
             setCounter={setCounter} updateNews={updateNews}
           text={text} updateNewsText={updateNewsText}
@@ -49,6 +53,7 @@ class User extends Component{
     );
   }
 }
+
 
 function mapStateToProps(state) {
   return {
