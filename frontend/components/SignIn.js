@@ -7,8 +7,14 @@ export default class SignIn extends React.Component{
     const password = this.refs.password.value;
     axios.post('/sessions', {session: {email: email, password: password}})
       .then((response) => {
+        if (response.data == null){
+          this.props.setErrors(['-Invalid email / password combination'])
+        } else {
         this.props.fetchCurrentUser()
         this.props.router.push(`user/${response.data.id}`)
+        this.props.setErrors([])
+
+      }
       })
   }
   render() {
