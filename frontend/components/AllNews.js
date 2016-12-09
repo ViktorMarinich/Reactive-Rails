@@ -39,10 +39,12 @@ export default class AllNews extends React.Component{
     })
      let i=1
     return (
-      <div  style={{width: '770px' }}>
-        <h1 style={{ textAlign: 'center'}}>News</h1>
-        <div style={{display: 'flex', paddingLeft: '20px', width: '300px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
+      <div  style={{width: '870px' }}>
+        <h3 style={{ textAlign: 'center'}}>News</h3>
+          <div style={{ borderStyle: 'double',textAlign: 'center', backgroundColor:'#5b4a77', paddingTop: '10px', paddingBottom: '10px'}}>
+        <div style={{display: 'flex', paddingLeft: '20px',marginLeft: '250px', width: '300px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
           {news}
+        </div>
         </div>
       </div>
       )
