@@ -43,12 +43,13 @@ export default class News extends React.Component{
       return <div>Loading</div>
     }
   return (
-    <div className='border shadow'>
-      <h3 className='align-center'>News</h3>
-      <textarea value={this.props.text} id='news' ref='comment'  onChange={this.changeContent}  type='text' placeholder='Type yours comment' cols='32' rows='2'/>
+    <div >
+      <h3 style={{textAlign: 'center'}}>News</h3>
+    <div style={{ borderStyle: 'double',textAlign: 'center', backgroundColor:'#823737', paddingTop: '10px', paddingBottom: '10px'}}>
+      <textarea value={this.props.text} id='news' ref='comment'  onChange={this.changeContent}  type='text' placeholder='Type yours comment' cols='40' rows='3'/>
         <div>
-            <Dropzone ref="dropzone"   onDrop={this.onDrop.bind(this)} >
-              <div style={{height: 100}}><h4>Drop image here to upload </h4></div>
+            <Dropzone ref="dropzone" style={{height: '70px', width: '330px', backgroundColor:'white',borderStyle: 'double',marginLeft: '27px', marginBottom: '10px', marginTop: '10px'}}  onDrop={this.onDrop.bind(this)} >
+              <div ><h4>Drop news images here </h4></div>
             </Dropzone>
             <button type="button" onClick={this.onOpenClick.bind(this)}>
                 Open file
@@ -59,10 +60,11 @@ export default class News extends React.Component{
               {news_files.map((file) => <img src={file.preview} width="50" height="50"/>)}
             </div>
             </div> : null}
-            <button id='create_news' onClick={this.createNews.bind(this)}>Send</button>
+            {(this.props.text.length>0)? <p><button id='create_news' onClick={this.createNews.bind(this)}>Send</button></p>: null}
         </div>
         <iframe ref='video' id="videoObject" style={{ display: 'none'}}  type="text/html" width="300" height="300" frameBorder="0" allowFullScreen></iframe>
         <NewsList user={this.props.user} prevParams={this.props.prevParams} setPrevParams={this.props.setPrevParams} counter={this.props.counter} setCounter={this.props.setCounter} />
+        </div>
     </div>
     )
   }
