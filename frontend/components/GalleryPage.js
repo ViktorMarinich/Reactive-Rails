@@ -19,21 +19,23 @@ export default class GalleryPage extends React.Component{
   LoadMore() {
     this.props.setCounter(this.props.counter+1)
   }
-
   infiniteLoad(){
-  //  if((this.props.counter - this.props.current_user.friends.length)>= 25){return null}
    const height = document.getElementsByTagName('body')[0].clientHeight - (window.innerHeight + window.pageYOffset)
-     if (height< 40){this.LoadMore()}
+     if (height< 60){this.LoadMore()}
   }
   render() {
     const current_user= this.props.current_user
-    const images = this.props.current_user.gallery.images.slice(0,this.props.counter).map((image)=>{
-     return   <img key={image.id}  src={image.image.url} style={{width: '700px'}} ></img>
-     })
+    const revert= 0 - this.props.counter
+    const images = current_user.gallery.images.slice(revert).sort(  function(a, b) {
+      if (a.id > b.id) { return -1;}
+      if (a.id < b.id) { return 1; }
+      return 0; }).map((image)=>{
+        return   <img key={image.id}  src={image.image.url} style={{width: '700px'}} ></img>
+      })
     return (
-      <div style={{width: '770px' }}>
-        <h1 style={{ textAlign: 'center'}}>Gallery</h1>
-        <div style={{display: 'flex', width: '770px', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
+      <div style={{width: '870px' }}>
+        <h3 style={{ textAlign: 'center'}}>Gallery</h3>
+        <div style={{display: 'flex', width: '770px', borderStyle: 'double',paddingBottom: '10px',textAlign: 'left', backgroundColor:'#823737', paddingLeft: '20px', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-around'}} >
           {images}
         </div>
       </div>
