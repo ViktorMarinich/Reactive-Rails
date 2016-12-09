@@ -4,7 +4,9 @@ require 'rails/test_help'
 require "capybara/rails"
 require "minitest/rails/capybara"
 require 'minitest/autorun'
+require 'database_cleaner'
 
+DatabaseCleaner.strategy = :transaction
 Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, :browser => :chrome)
 end
@@ -28,10 +30,12 @@ end
 
 class   ActionDispatch::IntegrationTest < ActiveSupport::TestCase
   def setup
+    DatabaseCleaner.start
     Capybara.current_driver = Capybara.javascript_driver
   end
 
   def teardown
+    DatabaseCleaner.clean
     Capybara.use_default_driver
   end
 end
