@@ -6,29 +6,27 @@ export default class Settings extends React.Component{
   constructor(props){
     super(props);
   }
+  updateSettings(){
+    const data = new FormData();
+    if (typeof this.props.files[0] !== "undefined"){
+    data.append( `user[avatar]`, this.props.files[0])}
+    data.append( `user[email]`, this.refs.email.value)
+    data.append( `user[name]`, this.refs.name.value)
+    axios.patch(`/users/${this.props.current_user.id}`,  data)
+      .then((response) => {
+        this.props.router.push(`user/${response.data.id}`)
+        this.props.fetchCurrentUser()
+        this.props.updateFiles([]);
+      })
+  }
+  onDrop(files) {
+    this.props.updateFiles(files.slice(0,1));
+  }
 
-    updateSettings(){
-      const data = new FormData();
-      if (typeof this.props.files[0] !== "undefined"){
-      data.append( `user[avatar]`, this.props.files[0])}
-      data.append( `user[email]`, this.refs.email.value)
-      data.append( `user[name]`, this.refs.name.value)
-      axios.patch(`/users/${this.props.current_user.id}`,  data)
-        .then((response) => {
-          this.props.router.push(`user/${response.data.id}`)
-          this.props.fetchCurrentUser()
-          this.props.updateFiles([]);
-        })
-    }
-    onDrop(files) {
-      this.props.updateFiles(files.slice(0,1));
-    }
-
-    onOpenClick () {
-       this.refs.dropzone.open();
-    }
-    render() {
-    console.log('aaa',this.props)
+  onOpenClick () {
+     this.refs.dropzone.open();
+  }
+  render() {
     const {current_user,files} = this.props
     return (
       <div style={{display: 'flex', width: '870px',flexDirection: 'column',alignContent: 'space-around', justifyContent: 'space-around'}}>
