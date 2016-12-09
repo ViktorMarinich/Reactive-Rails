@@ -28,8 +28,8 @@ class UsersControllerTest < ActionController::TestCase
       post :create, user: { name: "new", email: "aaaa@ukr.net", password: "aaaa",
         password_confirmation: "aaaa" }
     end
+    assert_equal 200, @response.status
     errors = JSON.parse(@response.body)
-    assert_equal 403, @response.status
     assert_equal "is too short (minimum is 4 characters)", errors["name"][0]
   end
 
@@ -38,8 +38,8 @@ class UsersControllerTest < ActionController::TestCase
       post :create, user: { name: @user.name, email: "aaaa.ukr.net",
         password: "aaaa",password_confirmation: "aaaa" }
     end
+    assert_equal 200, @response.status
     errors = JSON.parse(@response.body)
-    assert_equal 403, @response.status
     assert_equal  "is invalid", errors["email"][0]
   end
 
@@ -55,7 +55,7 @@ class UsersControllerTest < ActionController::TestCase
     login(@user)
     patch :update, id: @user, user: { name: "ne", email: '123321' }
     errors = JSON.parse(@response.body)
-    assert_equal 403, @response.status
+    assert_equal 200, @response.status
     assert_equal "is too short (minimum is 4 characters)", errors["name"][0]
     assert_equal  "is invalid", errors["email"][0]
   end
