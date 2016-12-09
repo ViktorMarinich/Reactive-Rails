@@ -25,10 +25,15 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if @user.update(user_params)
+    if params[:user][:avatar]
+      @user.avatar = params[:user][:avatar]
+    end
+    @user.name = params[:user][:name]
+    @user.email= params[:user][:email]
+    if @user.save
       render :json => @user.to_json
     else
-      render :json => @user.errors , status: 403
+      render :json => @user.errors
     end
   end
 
