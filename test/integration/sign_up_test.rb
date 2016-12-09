@@ -16,7 +16,6 @@ class UsersTest < ActionDispatch::IntegrationTest
     page.fill_in "password_field", :with => "password"
     page.fill_in "password_confirmation_field", :with => "password"
     page.find('button[id="sign_up"]').click
-    assert page.has_content?("theusewr@a.net")
     assert page.has_content?("name uniq")
     click_on "Sign Out"
   end
