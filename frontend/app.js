@@ -49,8 +49,10 @@ class App extends Component {
 
     )}
     return (
-      <div style={{display: 'flex', width: '1000px',flexDirection: 'row', justifyContent: 'space-around'}}>
-        <div style={{width: '200px', display: 'inline-block'}}>
+      <div style={{display: 'flex', width: '1000px',flexDirection: 'row'}}>
+        <div>
+        <h3 style={{textAlign: 'center'}}>Menu</h3>
+        <div style={{ width: '200px', borderStyle: 'double',textAlign: 'center', backgroundColor:'#4a6877', paddingTop: '10px', paddingBottom: '10px'}}>
           <p><Link to={`/user/${current_user.id}`}>My profile</Link></p>
           <p><Link to={`/settings`}>Settings</Link></p>
           <p><Link to={`/friends`}>Friends</Link></p>
@@ -58,7 +60,8 @@ class App extends Component {
           <p><Link to={`/news`}>News</Link></p>
           <p><Link to='/' onClick={this.SignOut.bind(this)}>Sign Out</Link></p>
         </div>
-        <div>
+        </div>
+        <div style={{paddingLeft: '10px'}}>
           {children && React.cloneElement(children, {current_user:current_user,
           files: files, router: router, counter: counter, updateFiles: updateFiles,
           allNews: allNews, fetchNews: fetchNews, setCounter: setCounter,
