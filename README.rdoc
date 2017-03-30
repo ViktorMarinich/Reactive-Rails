@@ -1,3 +1,0 @@
-Single page application  with redux and react on rails server.
-To run just enter - rails s
-You can use webpack -wc --config webpack.config.js if you need to build bundle.js
