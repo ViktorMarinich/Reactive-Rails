@@ -1,13 +1,17 @@
 
 **Reactive Rails!**
 ===================
-![Reactive Rails!](https://geeks.wego.com/content/images/2015/12/eed49439b4a4d36167ef4aa568beb94f.jpg)
+![Reactive Rails!](https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2016/02/rubyonraills-1200x703.jpg)
 
 ### Specifications:
 
-
 ----------
-
+> ### **Run:**
+ -  npm install
+ -  npm build:development
+ -  webpack -wc --config webpack.config.js
+ -  rails server
+ 
 > ### **Technologies we used:**
  -  **Ruby on rails** 
  - **React.js** 
@@ -18,8 +22,6 @@
  - **Node.js**
  - **NPM**
 
-
- 
 > ### **Configuration scripts**
  - `postinstall:` "cd app/assets/webpack && npm i",
  - `start:` "foreman start",
